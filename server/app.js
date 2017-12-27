@@ -1,7 +1,10 @@
 'use strict';
 
 const express = require('express');
+// MT: Uncomment when you're ready to connect to your database.
+// const db = require('./db/db-access');
 const path = require('path');
+// MT: Uncomment when you have a favicon ready to serve.
 // const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
