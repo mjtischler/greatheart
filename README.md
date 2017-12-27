@@ -1,4 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app) and utilizes tutorials from [Dave Ceddia](https://daveceddia.com/) ([Create React App with an Express Backend](https://daveceddia.com/create-react-app-express-backend/), [Create React App with Express in Production](https://daveceddia.com/create-react-app-express-production/)). 
+This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app) and utilizes tutorials from [Dave Ceddia](https://daveceddia.com/) ([Create React App with an Express Backend](https://daveceddia.com/create-react-app-express-backend/), [Create React App with Express in Production](https://daveceddia.com/create-react-app-express-production/)).
 
 You can find further information on tasks related to the React portion of this project [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
@@ -11,6 +11,8 @@ You can find further information on tasks related to the React portion of this p
 - [Firing up the Application](#firing-up-the-application)
   * [Express Server](#express-server)
   * [Development Server](#development-server)
+- [Database](#database)
+
 
 #### To Do
 
@@ -62,3 +64,33 @@ To launch a live-reloading development server, head to `/greatheart/client` and 
 You can now access your client-side code at:
 
 `http://localhost:3000/`
+
+#### Database
+
+This project utilizes [MongoDB](https://www.mongodb.com) for data storage. You'll need to sign up for a MongoDB Atlas cluster [here](https://www.mongodb.com/download-center).
+
+Our project will be looking for a database connection in `/server/db/db-access.js`, which has been `gitignore`'d for this project since it contains sensitive data. You need to create this file using the following template:
+
+```
+'use strict';
+
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+
+const uri = "mongodb://{{USERNAME}}:{{PASSWORD}}@{{PRIMARY_NODE}}:27017,{{SECONDARY_NODE_1}}:27017,{{SECONDARY_NODE_2}}:27017/admin?ssl=true&replicaSet={{NODE_MASTER_SOURCE}}-0&authSource=admin";
+
+MongoClient.connect(uri, function(err, client) {
+  assert.equal(null, err);
+
+  if (err) {
+    throw new Error('Database failed to connect!');
+  } else {
+    // MT: This is how you'll connect to your db for CRUD operations.
+    const database = client.db('{{DB_NAME}}');
+
+    client.close();
+  }
+});
+```
+
+Further information on the contents of this file can be found [here](https://docs.atlas.mongodb.com/driver-connection/#node-js-driver-example) in the section _MongoDB Version 3.4 and earlier_, and by logging into Atlas and checking *Clusters -> Connect -> Connect Your Application.* Replace the code above demarcated by `{{PARAMETER}}` with the necessary information. Once you've established a connection to your database, you'll be able to perform all necessary CRUD operations.
