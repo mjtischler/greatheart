@@ -1,8 +1,9 @@
 'use strict';
 
 const express = require('express');
-// MT: Uncomment when you're ready to connect to your database.
-// const db = require('./db/db-access');
+const db = require('./db/db-access');
+// MT: Needed to search by ID. We may move this elsewhere in the future.
+// const ObjectID = require('mongodb').ObjectID;
 const path = require('path');
 // MT: Uncomment when you have a favicon ready to serve.
 // const favicon = require('serve-favicon');
@@ -13,6 +14,12 @@ const bodyParser = require('body-parser');
 const index = require('./routes/index');
 const users = require('./routes/users');
 const app = express();
+
+// MT: Test our database connection on load
+db.testConnection();
+
+// MT: An example of how to update a collection based on _id.
+// db.updateCollection('test', '5a4411c5e65daa44b900d17c', {test: 'Updated Record'});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
