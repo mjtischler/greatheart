@@ -69,28 +69,12 @@ You can now access your client-side code at:
 
 This project utilizes [MongoDB](https://www.mongodb.com) for data storage. You'll need to sign up for a MongoDB Atlas cluster [here](https://www.mongodb.com/download-center).
 
-Our project will be looking for a database connection in `/server/db/db-access.js`, which has been `gitignore`'d for this project since it contains sensitive data. You need to create this file using the following template:
+Our project will be looking for a database connection string in `/server/db/access/connection-string.json`, which has been `gitignore`'d for this project since it contains sensitive data. You need to create this file using the following template:
 
-```
-'use strict';
+`
+ "mongodb://{{USERNAME}}:{{PASSWORD}}@{{PRIMARY_NODE}}:27017,{{SECONDARY_NODE_1}}:27017,{{SECONDARY_NODE_2}}:27017/admin?ssl=true&replicaSet={{NODE_MASTER_SOURCE}}-0&authSource=admin"
+`
 
-const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
+Further information on connecting to your Atlas instance can be found [here](https://docs.atlas.mongodb.com/driver-connection/#node-js-driver-example) in the section _MongoDB Version 3.4 and earlier_, and by logging into Atlas and checking *Clusters -> Connect -> Connect Your Application.* Replace the code above demarcated by `{{PARAMETER}}` with the necessary information. Once you've established a connection to your database, you'll be able to perform all necessary CRUD operations.
 
-const uri = "mongodb://{{USERNAME}}:{{PASSWORD}}@{{PRIMARY_NODE}}:27017,{{SECONDARY_NODE_1}}:27017,{{SECONDARY_NODE_2}}:27017/admin?ssl=true&replicaSet={{NODE_MASTER_SOURCE}}-0&authSource=admin";
-
-MongoClient.connect(uri, function(err, client) {
-  assert.equal(null, err);
-
-  if (err) {
-    throw new Error('Database failed to connect!');
-  } else {
-    // MT: This is how you'll connect to your db for CRUD operations.
-    const database = client.db('{{DB_NAME}}');
-
-    client.close();
-  }
-});
-```
-
-Further information on the contents of this file can be found [here](https://docs.atlas.mongodb.com/driver-connection/#node-js-driver-example) in the section _MongoDB Version 3.4 and earlier_, and by logging into Atlas and checking *Clusters -> Connect -> Connect Your Application.* Replace the code above demarcated by `{{PARAMETER}}` with the necessary information. Once you've established a connection to your database, you'll be able to perform all necessary CRUD operations.
+If you want to avoid installing the entire MongoDB framework on your machine or just like using a GUI, [download Robo 3T](https://robomongo.org/download) and follow [this tutorial](https://www.datduh.com/blog/2017/7/26/how-to-connect-to-mongodb-atlas-using-robo-3t-robomongo) to get connected to your Atlas instances.
