@@ -6,7 +6,10 @@
     "parserOptions": {
       "ecmaVersion": 6,
       "ecmaFeatures": {
-          "jsx": true
+          "jsx": true,
+          "modules": true,
+          "arrowFunctions": true,
+          "classes": true
       },
       "sourceType": "module"
     },
@@ -174,5 +177,5 @@
     ],
     "extends": [
         "plugin:react/recommended"
-    ],
+    ]
 }
