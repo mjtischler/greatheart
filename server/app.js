@@ -18,9 +18,6 @@ const app = express();
 // MT: Test our database connection on load
 db.testConnection();
 
-// MT: An example of how to update a collection based on _id.
-// db.updateCollection('test', '5a4411c5e65daa44b900d17c', {test: 'Updated Record'});
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
