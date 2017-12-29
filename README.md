@@ -4,7 +4,7 @@ You can find further information on tasks related to the React portion of this p
 
 ### Table of Contents
 
-- [To do](#to-do)
+- [To Do](#to-do)
 - [Me](#me)
 - [You](#you)
 - [Getting Started](#getting-started)
@@ -12,16 +12,23 @@ You can find further information on tasks related to the React portion of this p
   * [Express Server](#express-server)
   * [Development Server](#development-server)
 - [Database](#database)
+  * [Database Operations](#database-operations)
+    - [Testing Connections](#testing-connections)
+    - [Writing to a Collection](#writing-to-a-collection)
+    - [Searching a Collection](#searching-a-collection)
+    - [Updating a Record in a Collection](#updating-a-record-in-a-collection)
+    - [Removing a Record from a Collection](#removing-a-record-from-a-collection)
+  * [Promise-based Database Methods](#promise-based-database-methods)
 
 
 #### To Do
 
-- Install a database
-- Connect the database to an API
+- ~~Install a database~~
+- ~~Connect the database to an API~~
 
 #### Me
 
-I'm Matt Tischler, a software engineer living, working, and learning in the DC area. Separate from my day job I'm working on a few other applications, one of which is _The Greatheart Project_ (shortened here to _TGP_). While the full scope of _TGP_ has yet to be fleshed out, my first step in its creation is to build a resuable repo consisting of a server, client, and database. This repository will be used as a basis for both _TGP_ and future web applications.
+I'm Matt Tischler, a software engineer living, working, and learning in the DC area. Separate from my day job I'm working on a few other applications, one of which is _The Greatheart Project_ (shortened here to _TGP_). While the full scope of _TGP_ has yet to be fleshed out, my first step in its creation is to build a reusable repo consisting of a server, client, and database. This repository will be used as a basis for both _TGP_ and future web applications.
 
 #### You
 
@@ -78,3 +85,51 @@ Our project will be looking for a database connection string in `/server/db/acce
 Further information on connecting to your Atlas instance can be found [here](https://docs.atlas.mongodb.com/driver-connection/#node-js-driver-example) in the section _MongoDB Version 3.4 and earlier_, and by logging into Atlas and checking *Clusters -> Connect -> Connect Your Application.* Replace the code above demarcated by `{{PARAMETER}}` with the necessary information. Once you've established a connection to your database, you'll be able to perform all necessary CRUD operations.
 
 If you want to avoid installing the entire MongoDB framework on your machine or just like using a GUI, [download Robo 3T](https://robomongo.org/download) and follow [this tutorial](https://www.datduh.com/blog/2017/7/26/how-to-connect-to-mongodb-atlas-using-robo-3t-robomongo) to get connected to your Atlas instances.
+
+##### Database Operations
+
+To access the library of CRUD commands, you'll need to use `require()` in your modules:
+
+`const db = require('../db/db-access');`
+
+You can now call any operation by utilizing `db.{{FUNCTION_NAME}}`.
+
+###### Testing Connections
+
+The `testConnection()` function requires no parameters and will either fail the system (since a database connection is required) or return a successful response.
+
+###### Writing to a Collection
+(_Promise-based_, [see below](#promise-based-database-methods))
+
+`writeToCollection()` is used for writing one or more objects to the database and requires two parameters: `collectionName` and `newRecord`. `collectionName` is the document of your database to which you wish to write and must be a `string`. `newRecord` can be an `object`, or an `array` of `objects`. `isInsertingMultiple` is a `boolean` and if `newRecord` is an array then it must set to `true`.
+
+###### Searching a Collection
+(_Promise-based_, [see below](#promise-based-database-methods))
+
+`searchCollection()` is used for returning records from a collection based on a query and requires one parameter: `collectionName`. `collectionName` is the document of your database through which you wish to search and must be a `string`. `query` is an `object` that matches the collection's data structure (i.e. the key/pair for which you're searching). Not passing a `query` will return the entire collection.
+
+###### Updating a Record in a Collection
+(_Promise-based_, [see below](#promise-based-database-methods))
+
+`updateCollection()` is used for updating one or more objects in the database and requires two parameters: `collectionName` and `recordID`. `collectionName` is the document of your database to which you wish to write and must be a `string`. `recordID` is the `string` key that matches the document's `_id`. `updatedRecord` must be an `object`. **TO DO**: Allow updating multiple records.
+
+###### Removing a Record from a Collection
+(_Promise-based_, [see below](#promise-based-database-methods))
+
+`removeFromCollection()` is used for removing a record from the database and requires two parameters: `collectionName` and `recordID`. `collectionName` is the document of your database to which you wish to write and must be a `string`. `recordID` is `string` key that matches the document's `_id`. **TO DO**: Allow removing multiple records.
+
+##### Promise-based Database Methods
+
+CRUD operations against the database will return a promise of either `resolve` or `reject`. When calling a promise-based function in an API, you'll need append the call with `.then()` to retrieve the response. All CRUD operations return a `.catch()` when a promise is rejected, and that will need to be accounted for as well. An example:
+
+```
+router.get('/', (req, res) => {
+  db.searchCollection('test')
+    .then(resolve => {
+      res.json([resolve.result]);
+    })
+    .catch(reject => {
+      console.log(reject.status, reject.result);
+    });
+});
+```

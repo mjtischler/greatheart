@@ -2,19 +2,17 @@
 
 const express = require('express');
 const router = express.Router();
+const db = require('../db/db-access');
 
 /* GET users listing. */
 router.get('/', (req, res) => {
-  res.json([
-    {
-      id: 1,
-      username: 'testuser1'
-    },
-    {
-      id: 2,
-      username: 'testuser2'
-    }
-  ]);
+  db.searchCollection('test')
+    .then(resolve => {
+      res.json([resolve.result]);
+    })
+    .catch(reject => {
+      console.log(reject.status, reject.result);
+    });
 });
 
 module.exports = router;
