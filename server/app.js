@@ -10,9 +10,14 @@ const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
+const login = require('./routes/apis/login');
+const signup = require('./routes/apis/signup');
+const profile = require('./routes/profile');
+
 const app = express();
 
 // MT: Test our database connection on load
@@ -24,6 +29,12 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
+app.use(session({
+  secret: 'work hard',
+  resave: true,
+  saveUninitialized: false
+}));
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded(
@@ -34,6 +45,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/api/login', login);
+app.use('/api/signup', signup);
+app.use('/profile', profile);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

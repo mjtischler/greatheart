@@ -1,8 +1,7 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app) and utilizes tutorials from [Dave Ceddia](https://daveceddia.com/) ([Create React App with an Express Backend](https://daveceddia.com/create-react-app-express-backend/), [Create React App with Express in Production](https://daveceddia.com/create-react-app-express-production/)).
+# Greatheart
+A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in progress_. Enjoy!
 
-You can find further information on tasks related to the React portion of this project [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
-
-### Table of Contents
+## Table of Contents
 
 - [To Do](#to-do)
 - [Me](#me)
@@ -10,6 +9,7 @@ You can find further information on tasks related to the React portion of this p
 - [Getting Started](#getting-started)
 - [Firing up the Application](#firing-up-the-application)
   * [Express Server](#express-server)
+    - [Restarting with Nodemon](#restarting-with-nodemon)
   * [Development Server](#development-server)
 - [Database](#database)
   * [Database Operations](#database-operations)
@@ -19,22 +19,24 @@ You can find further information on tasks related to the React portion of this p
     - [Updating a Record in a Collection](#updating-a-record-in-a-collection)
     - [Removing a Record from a Collection](#removing-a-record-from-a-collection)
   * [Promise-based Database Methods](#promise-based-database-methods)
+- [Helpful Resources](#helpful-resources)
 
+### To Do
+- Search the DB for an existing email address and return an error
+- Correctly store login session
+- Handle login errors without redirects
+- Redirect successful signup to the profile page with a stored session
+- Add error handling to front-end login/signup form
 
-#### To Do
-
-- ~~Install a database~~
-- ~~Connect the database to an API~~
-
-#### Me
+### Me
 
 I'm Matt Tischler, a software engineer living, working, and learning in the DC area. Separate from my day job I'm working on a few other applications, one of which is _The Greatheart Project_ (shortened here to _TGP_). While the full scope of _TGP_ has yet to be fleshed out, my first step in its creation is to build a reusable repo consisting of a server, client, and database. This repository will be used as a basis for both _TGP_ and future web applications.
 
-#### You
+### You
 
 Welcome! I'm glad you stopped by. Please feel free to submit a pull request, review some code, fork the repo, or copy any part of this project.
 
-#### Getting Started
+### Getting Started
 
 First, clone the repo:
 
@@ -46,9 +48,9 @@ This project requires [Node.js](https://nodejs.org/en/download/), so be sure you
 
 Config files for [ESLint](https://www.npmjs.com/package/eslint) are provided under each application directory, and will lint according to that application's technology (i.e. `/server` will lint using `eslint-plugin-node` and '/client' will do the same using `eslint-plugin-react`).
 
-#### Firing up the Application
+### Firing up the Application
 
-##### Express Server
+#### Express Server
 
 The workflow for local development is a tad awkward and may be tweaked in the future. Before running the Express server, you'll want to generate a production build of the project for Express to provide to the client. From the `/greatheart/client` directory:
 
@@ -60,9 +62,15 @@ To start the Express server, navigate to the `/greatheart/server` directory and 
 
 This will serve a copy of the production build of the React app and all APIs at `http://localhost:3001/`.
 
-**NOTE**: This version is for production testing and API access only. Any changes to the development version of the client app will not be reflected here until `npm run build` is executed from the `greatheart/client` directory, and live-reloading via the development server won't work.
+**NOTE**: This version is for production testing and API access only. Any changes to the development version of the client app will not be reflected here until `npm run build` is executed from the `greatheart/client` directory.
 
-##### Development Server
+##### Restarting with Nodemon
+
+To automatically restart the Express server when a file changes, use:
+
+`npm run nodemon`
+
+#### Development Server
 
 To launch a live-reloading development server, head to `/greatheart/client` and run:
 
@@ -72,7 +80,7 @@ You can now access your client-side code at:
 
 `http://localhost:3000/`
 
-#### Database
+### Database
 
 This project utilizes [MongoDB](https://www.mongodb.com) for data storage. You'll need to sign up for a MongoDB Atlas cluster [here](https://www.mongodb.com/download-center).
 
@@ -86,7 +94,7 @@ Further information on connecting to your Atlas instance can be found [here](htt
 
 If you want to avoid installing the entire MongoDB framework on your machine or just like using a GUI, [download Robo 3T](https://robomongo.org/download) and follow [this tutorial](https://www.datduh.com/blog/2017/7/26/how-to-connect-to-mongodb-atlas-using-robo-3t-robomongo) to get connected to your Atlas instances.
 
-##### Database Operations
+#### Database Operations
 
 To access the library of CRUD commands, you'll need to use `require()` in your modules:
 
@@ -94,31 +102,31 @@ To access the library of CRUD commands, you'll need to use `require()` in your m
 
 You can now call any operation by utilizing `db.{{FUNCTION_NAME}}`.
 
-###### Testing Connections
+##### Testing Connections
 
 The `testConnection()` function requires no parameters and will either fail the system (since a database connection is required) or return a successful response.
 
-###### Writing to a Collection
+##### Writing to a Collection
 (_Promise-based_, [see below](#promise-based-database-methods))
 
 `writeToCollection()` is used for writing one or more objects to the database and requires two parameters: `collectionName` and `newRecord`. `collectionName` is the document of your database to which you wish to write and must be a `string`. `newRecord` can be an `object`, or an `array` of `objects`. `isInsertingMultiple` is a `boolean` and if `newRecord` is an array then it must set to `true`.
 
-###### Searching a Collection
+##### Searching a Collection
 (_Promise-based_, [see below](#promise-based-database-methods))
 
 `searchCollection()` is used for returning records from a collection based on a query and requires one parameter: `collectionName`. `collectionName` is the document of your database through which you wish to search and must be a `string`. `query` is an `object` that matches the collection's data structure (i.e. the key/pair for which you're searching). Not passing a `query` will return the entire collection.
 
-###### Updating a Record in a Collection
+##### Updating a Record in a Collection
 (_Promise-based_, [see below](#promise-based-database-methods))
 
 `updateCollection()` is used for updating one or more objects in the database and requires two parameters: `collectionName` and `recordID`. `collectionName` is the document of your database to which you wish to write and must be a `string`. `recordID` is the `string` key that matches the document's `_id`. `updatedRecord` must be an `object`. **TO DO**: Allow updating multiple records.
 
-###### Removing a Record from a Collection
+##### Removing a Record from a Collection
 (_Promise-based_, [see below](#promise-based-database-methods))
 
 `removeFromCollection()` is used for removing a record from the database and requires two parameters: `collectionName` and `recordID`. `collectionName` is the document of your database to which you wish to write and must be a `string`. `recordID` is `string` key that matches the document's `_id`. **TO DO**: Allow removing multiple records.
 
-##### Promise-based Database Methods
+#### Promise-based Database Methods
 
 CRUD operations against the database will return a promise of either `resolve` or `reject`. When calling a promise-based function in an API, you'll need append the call with `.then()` to retrieve the response. All CRUD operations return a `.catch()` when a promise is rejected, and that will need to be accounted for as well. An example:
 
@@ -133,3 +141,9 @@ router.get('/', (req, res) => {
     });
 });
 ```
+
+### Helpful Resources
+
+This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app) and utilizes tutorials from [Dave Ceddia](https://daveceddia.com/) ([Create React App with an Express Backend](https://daveceddia.com/create-react-app-express-backend/), [Create React App with Express in Production](https://daveceddia.com/create-react-app-express-production/)). You can find further information on tasks related to the React portion of this project [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
+
+[Daniel Deutsch](https://medium.com/@ddcreationstudi) has written a [good primer](https://medium.com/of-all-things-tech-progress/starting-with-authentication-a-tutorial-with-node-js-and-mongodb-25d524ca0359) on authentication with Node.js and MongoDB. I'm much obliged for his tutelage.
