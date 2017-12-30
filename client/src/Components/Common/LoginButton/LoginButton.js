@@ -61,13 +61,34 @@ class LoginButton extends Component {
 
   handleLoginButtonClick (event) {
     event.preventDefault();
-    // MT: Pass values to API
+    fetch('/api/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        loginEmail: this.state.loginEmail,
+        loginPassword: this.state.loginPassword
+      }),
+      headers: {'Content-Type': 'application/json'}
+    }).then(res => {
+      if (res.redirected) {
+        window.location = '/profile';
+      } else {
+        window.location = '/';
+      }
+    });
   }
 
   handleSignupButtonClick (event) {
     event.preventDefault();
 
-    // MT: Pass values to API
+    fetch('/api/signup', {
+      method: 'POST',
+      body: JSON.stringify({
+        signupEmail: this.state.signupEmail,
+        signupPassword: this.state.signupPassword,
+        signupPasswordReentry: this.state.signupPasswordReentry
+      }),
+      headers: {'Content-Type': 'application/json'}
+    });
   }
 
   render () {

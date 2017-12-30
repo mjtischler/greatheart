@@ -1,11 +1,15 @@
-.Profile-header {
+.Home-header {
   background-color: #222;
   color: white;
   height: 76px;
   padding: 20px;
 }
 
-.Profile-title {
+.Home-title {
   float: left;
   font-size: 1.5em;
+}
+
+.Home-intro {
+  font-size: large;
 }

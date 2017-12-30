@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import LoginButton from './Components/LoginButton/LoginButton';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import Home from './Components/Home/Home';
+import Profile from './Components/Profile/Profile';
 import './App.css';
 
 class App extends Component {
@@ -15,13 +17,13 @@ class App extends Component {
     return (
       <MuiThemeProvider>
         <div className="App">
-          <header className="App-header">
-            <h1 className="App-title">Welcome to Greatheart</h1>
-            <LoginButton></LoginButton>
-          </header>
-          <p className="App-intro">
-            Please sign up for an account or login above.
-          </p>
+          <Router>
+            <Switch>
+                <Route exact path="/" component={() => <Home />}/>
+                  <Route exact path="/profile" component={() => <Profile />}/>
+                <Route path="*" component={() => <Home />} />
+            </Switch>
+          </Router>
         </div>
       </MuiThemeProvider>
     );
