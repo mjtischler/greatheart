@@ -166,9 +166,7 @@
         "no-plusplus": 0,
         "no-prototype-builtins": 2,
         "prefer-template": 2,
-        "template-curly-spacing": [2, "never"],
-        // Node
-        "node/shebang": 0
+        "template-curly-spacing": [2, "never"]
     },
     "plugins": [
         "node"
