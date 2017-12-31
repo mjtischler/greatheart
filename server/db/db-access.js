@@ -82,6 +82,7 @@ db.writeToCollection = function (collectionName, newRecord, isInsertingMultiple)
 
                 db.response.status = 'OK';
                 db.response.result = message;
+                db.response._id = result.ops[0]._id;
 
                 resolve(db.response);
               }
@@ -120,10 +121,10 @@ db.searchCollection = function (collectionName, query) {
               message = 'No records found';
               console.log(message);
 
-              db.response.status = 'OK';
+              db.response.status = 'ERROR';
               db.response.result = message;
 
-              resolve(db.response);
+              reject(db.response);
             } else {
               message = `Found ${docs.length} matching records.`;
               console.log(message);

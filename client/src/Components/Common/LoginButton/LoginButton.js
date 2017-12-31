@@ -25,9 +25,11 @@ class LoginButton extends Component {
       open: false,
       loginEmail: null,
       loginPassword: null,
+      loginError: null,
       signupEmail: null,
       signupPassword: null,
-      signupPasswordReentry: null
+      signupPasswordReentry: null,
+      signupError: null
     };
 
     this.handleMasterButtonClick = this.handleMasterButtonClick.bind(this);
@@ -61,6 +63,7 @@ class LoginButton extends Component {
 
   handleLoginButtonClick (event) {
     event.preventDefault();
+
     fetch('/api/login', {
       method: 'POST',
       body: JSON.stringify({
@@ -68,11 +71,13 @@ class LoginButton extends Component {
         loginPassword: this.state.loginPassword
       }),
       headers: {'Content-Type': 'application/json'}
-    }).then(res => {
-      if (res.redirected) {
+    }).then(response => response.json()).then(response => {
+      if (response.redirected) {
         window.location = '/profile';
       } else {
-        window.location = '/';
+        this.setState({
+          loginError: response.message
+        });
       }
     });
   }
@@ -84,10 +89,19 @@ class LoginButton extends Component {
       method: 'POST',
       body: JSON.stringify({
         signupEmail: this.state.signupEmail,
+        signupUsername: this.state.signupUsername,
         signupPassword: this.state.signupPassword,
         signupPasswordReentry: this.state.signupPasswordReentry
       }),
       headers: {'Content-Type': 'application/json'}
+    }).then(response => response.json()).then(response => {
+      if (response.redirected) {
+        window.location = '/profile';
+      } else {
+        this.setState({
+          signupError: response.message
+        });
+      }
     });
   }
 
@@ -111,6 +125,7 @@ class LoginButton extends Component {
                 hintText="Email"
                 fullWidth={true}
                 onChange={this.handleTextFieldChange}
+                errorText={this.state.loginError}
               /><br />
               <TextField
                 id="loginPassword"
@@ -128,6 +143,13 @@ class LoginButton extends Component {
               <TextField
                 id="signupEmail"
                 hintText="Email"
+                fullWidth={true}
+                onChange={this.handleTextFieldChange}
+                errorText={this.state.signupError}
+              /><br />
+              <TextField
+                id="signupUsername"
+                hintText="Username"
                 fullWidth={true}
                 onChange={this.handleTextFieldChange}
               /><br />

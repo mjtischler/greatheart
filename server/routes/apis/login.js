@@ -21,17 +21,29 @@ router.post('/', (req, res) => {
         bcrypt.compare(login.password, resolve.result[0].password, (err, result) => {
           if (result === true) {
             req.session.userId = resolve.result[0]._id;
-            res.redirect('/profile');
+            res.json({
+              status: 'OK',
+              redirected: 'true'
+            });
           } else {
-            res.json({status: 'Password incorrect'});
+            res.json({
+              status: 'ERROR',
+              message: 'Password incorrect'
+            });
           }
         });
       })
       .catch(() => {
-        res.json({status: 'User not found'});
+        res.json({
+          status: 'ERROR',
+          message: 'Email address not found'
+        });
       });
   } else {
-    res.json(['Invalid login']);
+    res.json({
+      status: 'ERROR',
+      message: 'Invalid login'
+    });
   }
 });
 

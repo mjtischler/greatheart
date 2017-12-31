@@ -3,6 +3,9 @@
        "es6": true,
        "browser": true
     },
+    "globals": {
+        "React": true
+    },
     "parserOptions": {
       "ecmaVersion": 6,
       "ecmaFeatures": {

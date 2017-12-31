@@ -22,11 +22,11 @@ A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in
 - [Helpful Resources](#helpful-resources)
 
 ### To Do
-- Search the DB for an existing email address and return an error
+- ~~Search the DB for an existing email address/username and return an error~~
 - Correctly store login session
-- Handle login errors without redirects
-- Redirect successful signup to the profile page with a stored session
-- Add error handling to front-end login/signup form
+- ~~Handle login errors without redirects~~
+- ~~Redirect successful signup to the profile page with a stored session~~
+- ~~Add basic error handling to front-end login/signup form~~
 
 ### Me
 
@@ -46,7 +46,11 @@ This project requires [Node.js](https://nodejs.org/en/download/), so be sure you
 
 `npm install`
 
-Config files for [ESLint](https://www.npmjs.com/package/eslint) are provided under each application directory, and will lint according to that application's technology (i.e. `/server` will lint using `eslint-plugin-node` and '/client' will do the same using `eslint-plugin-react`).
+Config files for [ESLint](https://www.npmjs.com/package/eslint) are provided under each application directory, and will lint according to that application's technology (i.e. `/server` will lint using `eslint-plugin-node` and `/client` will do the same using `eslint-plugin-react`). Your'll want to install these plugins globally if you plan on using ESLint in your editor:
+
+`npm install -g eslint-plugin-node`
+
+`npm install -g eslint-plugin-react`
 
 ### Firing up the Application
 
