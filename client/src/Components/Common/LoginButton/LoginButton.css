@@ -13,11 +13,15 @@
 }
 
 .LoginButton-login-pane {
-  min-height: 156px;
+  min-height: 172px;
 }
 
 .LoginButton-signup-pane {
   min-height: 264px;
+}
+
+.LoginButton-textfield {
+  margin-bottom: 20px;
 }
 
 .LoginButton-menu-button {

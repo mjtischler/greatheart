@@ -28,7 +28,7 @@ router.post('/', (req, res) => {
           } else {
             res.json({
               status: 'ERROR',
-              message: 'Password incorrect'
+              message: 'Password is incorrect.'
             });
           }
         });
@@ -36,13 +36,13 @@ router.post('/', (req, res) => {
       .catch(() => {
         res.json({
           status: 'ERROR',
-          message: 'Email address not found'
+          message: 'Email address not found.'
         });
       });
   } else {
     res.json({
       status: 'ERROR',
-      message: 'Invalid login'
+      message: 'Login is invalid.'
     });
   }
 });

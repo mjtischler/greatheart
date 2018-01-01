@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
 import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
 import './LoginButton.css';
@@ -25,18 +26,78 @@ class LoginButton extends Component {
       open: false,
       loginEmail: null,
       loginPassword: null,
-      loginError: null,
       signupEmail: null,
       signupPassword: null,
       signupPasswordReentry: null,
-      signupError: null
+      errors: {
+        validation: null,
+        loginEmail: null,
+        loginPassword: null,
+        signupGeneric: null,
+        signupEmail: null,
+        signupUsername: null
+      }
     };
 
+    this.handleValidationErrors = this.handleValidationErrors.bind(this);
+    this.clearValidationErrors = this.clearValidationErrors.bind(this);
     this.handleMasterButtonClick = this.handleMasterButtonClick.bind(this);
     this.handleRequestClose = this.handleRequestClose.bind(this);
     this.handleTextFieldChange = this.handleTextFieldChange.bind(this);
     this.handleLoginButtonClick = this.handleLoginButtonClick.bind(this);
     this.handleSignupButtonClick = this.handleSignupButtonClick.bind(this);
+  }
+
+  handleValidationErrors (error) {
+    // MT: Reset the errors state when the function is called.
+    this.clearValidationErrors();
+
+    switch (error) {
+      case 'Login is invalid.':
+        this.setState({
+          errors: Object.assign(this.state.errors, {loginEmail: error})
+        });
+        break;
+      case 'Email address not found.':
+        this.setState({
+          errors: Object.assign(this.state.errors, {loginEmail: error})
+        });
+        break;
+      case 'Password is incorrect.':
+        this.setState({
+          errors: Object.assign(this.state.errors, {loginPassword: error})
+        });
+        break;
+      case 'All fields must be filled out and the passwords must match.':
+        this.setState({
+          errors: Object.assign(this.state.errors, {signupGeneric: error})
+        });
+        break;
+      case 'Email address already exists.':
+        this.setState({
+          errors: Object.assign(this.state.errors, {signupEmail: error})
+        });
+        break;
+      case 'Username has been taken.':
+        this.setState({
+          errors: Object.assign(this.state.errors, {signupUsername: error})
+        });
+        break;
+      default:
+    }
+  }
+
+  clearValidationErrors () {
+    this.setState({
+      errors: Object.assign(this.state.errors, {
+        validation: null,
+        loginEmail: null,
+        loginPassword: null,
+        signupGeneric: null,
+        signupEmail: null,
+        signupUsername: null
+      })
+    });
   }
 
   handleMasterButtonClick (event) {
@@ -50,6 +111,9 @@ class LoginButton extends Component {
   }
 
   handleRequestClose () {
+    // MT: Clear validation errors when closing the menu.
+    this.clearValidationErrors();
+
     this.setState({
       open: false
     });
@@ -75,9 +139,7 @@ class LoginButton extends Component {
       if (response.redirected) {
         window.location = '/profile';
       } else {
-        this.setState({
-          loginError: response.message
-        });
+        this.handleValidationErrors(response.message);
       }
     });
   }
@@ -98,9 +160,7 @@ class LoginButton extends Component {
       if (response.redirected) {
         window.location = '/profile';
       } else {
-        this.setState({
-          signupError: response.message
-        });
+        this.handleValidationErrors(response.message);
       }
     });
   }
@@ -119,20 +179,24 @@ class LoginButton extends Component {
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
           onRequestClose={this.handleRequestClose}
         >
+          <Menu>
             <div className="LoginButton-login-pane">
               <TextField
                 id="loginEmail"
+                className="LoginButton-textfield"
                 hintText="Email"
                 fullWidth={true}
                 onChange={this.handleTextFieldChange}
-                errorText={this.state.loginError}
+                errorText={this.state.errors.loginEmail}
               /><br />
               <TextField
                 id="loginPassword"
+                className="LoginButton-textfield"
                 hintText="Password"
                 fullWidth={true}
                 type="password"
                 onChange={this.handleTextFieldChange}
+                errorText={this.state.errors.loginPassword}
               /><br />
               <RaisedButton primary={true} className="LoginButton-menu-button" onClick={this.handleLoginButtonClick}>
                 Login
@@ -142,19 +206,23 @@ class LoginButton extends Component {
             <div className="LoginButton-signup-pane">
               <TextField
                 id="signupEmail"
+                className="LoginButton-textfield"
                 hintText="Email"
                 fullWidth={true}
                 onChange={this.handleTextFieldChange}
-                errorText={this.state.signupError}
+                errorText={this.state.errors.signupEmail}
               /><br />
               <TextField
                 id="signupUsername"
+                className="LoginButton-textfield"
                 hintText="Username"
                 fullWidth={true}
                 onChange={this.handleTextFieldChange}
+                errorText={this.state.errors.signupUsername}
               /><br />
               <TextField
                 id="signupPassword"
+                className="LoginButton-textfield"
                 hintText="Password"
                 fullWidth={true}
                 type="password"
@@ -162,15 +230,18 @@ class LoginButton extends Component {
               /><br />
               <TextField
                 id="signupPasswordReentry"
+                className="LoginButton-textfield"
                 hintText="Repeat Password"
                 fullWidth={true}
                 type="password"
                 onChange={this.handleTextFieldChange}
+                errorText={this.state.errors.signupGeneric}
               /><br />
             <RaisedButton primary={true} className="LoginButton-menu-button" onClick={this.handleSignupButtonClick}>
                 Sign Up
               </RaisedButton>
             </div>
+          </Menu>
         </Popover>
       </div>
     );

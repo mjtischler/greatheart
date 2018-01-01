@@ -22,11 +22,7 @@ A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in
 - [Helpful Resources](#helpful-resources)
 
 ### To Do
-- ~~Search the DB for an existing email address/username and return an error~~
 - Correctly store login session
-- ~~Handle login errors without redirects~~
-- ~~Redirect successful signup to the profile page with a stored session~~
-- ~~Add basic error handling to front-end login/signup form~~
 
 ### Me
 
