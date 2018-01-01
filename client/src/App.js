@@ -7,10 +7,6 @@ import './App.css';
 
 class App extends Component {
   componentDidMount () {
-    // MT: Re-enable when ready to access APIs
-    // fetch('/users')
-    //   .then(res => res.json())
-    //   .then(users => this.setState({ users }));
   }
 
   render () {
@@ -20,7 +16,7 @@ class App extends Component {
           <Router>
             <Switch>
                 <Route exact path="/" component={() => <Home />}/>
-                  <Route exact path="/profile" component={() => <Profile />}/>
+                <Route exact path="/profile" component={() => <Profile />}/>
                 <Route path="*" component={() => <Home />} />
             </Switch>
           </Router>

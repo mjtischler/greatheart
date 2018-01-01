@@ -20,6 +20,20 @@ const profile = require('./routes/profile');
 
 const app = express();
 
+const userSession = {
+  secret: 'calico combine',
+  resave: true,
+  saveUninitialized: false,
+  cookie: {}
+};
+
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1); // trust first proxy
+  userSession.cookie.secure = true; // serve secure cookies
+}
+
+app.use(session(userSession));
+
 // MT: Test our database connection on load
 db.testConnection();
 
@@ -29,11 +43,6 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
-app.use(session({
-  secret: 'work hard',
-  resave: true,
-  saveUninitialized: false
-}));
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
