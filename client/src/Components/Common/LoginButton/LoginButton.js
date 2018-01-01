@@ -136,6 +136,7 @@ class LoginButton extends Component {
       }),
       headers: {'Content-Type': 'application/json'}
     }).then(response => response.json()).then(response => {
+      // MT: A successful login will return a redirected bool of 'true', triggering the loading of the profile page.
       if (response.redirected) {
         window.location = '/profile';
       } else {
@@ -157,6 +158,7 @@ class LoginButton extends Component {
       }),
       headers: {'Content-Type': 'application/json'}
     }).then(response => response.json()).then(response => {
+      // MT: A successful login will return a redirected bool of 'true', triggering the loading of the profile page.
       if (response.redirected) {
         window.location = '/profile';
       } else {
@@ -186,6 +188,7 @@ class LoginButton extends Component {
                 className="LoginButton-textfield"
                 hintText="Email"
                 fullWidth={true}
+                type="text"
                 onChange={this.handleTextFieldChange}
                 errorText={this.state.errors.loginEmail}
               /><br />
@@ -209,6 +212,7 @@ class LoginButton extends Component {
                 className="LoginButton-textfield"
                 hintText="Email"
                 fullWidth={true}
+                type="text"
                 onChange={this.handleTextFieldChange}
                 errorText={this.state.errors.signupEmail}
               /><br />
@@ -217,6 +221,7 @@ class LoginButton extends Component {
                 className="LoginButton-textfield"
                 hintText="Username"
                 fullWidth={true}
+                type="text"
                 onChange={this.handleTextFieldChange}
                 errorText={this.state.errors.signupUsername}
               /><br />
@@ -237,7 +242,7 @@ class LoginButton extends Component {
                 onChange={this.handleTextFieldChange}
                 errorText={this.state.errors.signupGeneric}
               /><br />
-            <RaisedButton primary={true} className="LoginButton-menu-button" onClick={this.handleSignupButtonClick}>
+              <RaisedButton primary={true} className="LoginButton-menu-button" onClick={this.handleSignupButtonClick}>
                 Sign Up
               </RaisedButton>
             </div>

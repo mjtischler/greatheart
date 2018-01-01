@@ -21,16 +21,18 @@ router.post('/', (req, res) => {
         bcrypt.compare(login.password, resolve.result[0].password, (err, result) => {
           if (result === true) {
             req.session.userId = resolve.result[0]._id;
-            res.json({
+
+            return res.json({
               status: 'OK',
               redirected: 'true'
             });
-          } else {
-            res.json({
-              status: 'ERROR',
-              message: 'Password is incorrect.'
-            });
           }
+
+          // MT: If the passwords don't match, return an error object.
+          return res.json({
+            status: 'ERROR',
+            message: 'Password is incorrect.'
+          });
         });
       })
       .catch(() => {

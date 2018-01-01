@@ -48,6 +48,7 @@ router.post('/', (req, res) => {
         db.writeToCollection('Users', signup)
           .then(resolve => {
             req.session.userId = resolve._id;
+
             res.json({
               status: 'OK',
               redirected: 'true'

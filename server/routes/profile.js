@@ -2,17 +2,15 @@
 
 const express = require('express');
 const router = express.Router();
-// const db = require('../db/db-access');
+const path = require('path');
 
-/* GET users listing. */
+router.use(express.static(path.join(__dirname, '../../client/build')));
+
 router.get('/profile', (req, res) => {
-  // db.searchCollection('test')
-  //   .then(resolve => {
-  //     res.json([resolve.result]);
-  //   })
-  //   .catch(reject => {
-  //     console.log(reject.status, reject.result);
-  //   });
+  // MT: We pass the redirected flag to the react-router on a successful login in the login and signup APIs, but we need the server route to match the client route so we can maintain a session and send the appropriate data back and forth.
+  res.sendFile(path.join(__dirname, '../../client/build/index.html', () => {
+    console.log('req');
+  }));
 });
 
 module.exports = router;
