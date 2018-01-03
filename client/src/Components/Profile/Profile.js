@@ -2,6 +2,19 @@ import React, { Component } from 'react';
 import './Profile.css';
 
 class Profile extends Component {
+  componentDidMount () {
+    fetch('/api/user', {
+      method: 'GET',
+      credentials: 'include'
+    }).then(response => response.json()).then(response => {
+      if (response.status === 'OK') {
+        console.log('RESPONSE', response);
+      } else {
+        window.location = '/';
+      }
+    });
+  }
+
   render () {
     return (
       <div>

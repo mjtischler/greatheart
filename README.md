@@ -11,6 +11,7 @@ A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in
   * [Express Server](#express-server)
     - [Restarting with Nodemon](#restarting-with-nodemon)
   * [Development Server](#development-server)
+- [Secure Cookies](#secure-cookies)
 - [Database](#database)
   * [Database Operations](#database-operations)
     - [Testing Connections](#testing-connections)
@@ -22,7 +23,9 @@ A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in
 - [Helpful Resources](#helpful-resources)
 
 ### To Do
-- Correctly store login session
+- ~~Correctly store login session~~
+- Create logout feature
+- Regex signup email addresses for `@`
 
 ### Me
 
@@ -56,6 +59,8 @@ The workflow for local development is a tad awkward and may be tweaked in the fu
 
 `npm run build`
 
+**NOTE**: This will delete the last built client-side code from the server's `public` directory and copy the latest front-end updates for Express to serve up. See the client's `package.json` for how we're doing this if you have issues.
+
 To start the Express server, navigate to the `/greatheart/server` directory and run:
 
 `npm start`
@@ -80,6 +85,16 @@ You can now access your client-side code at:
 
 `http://localhost:3000/`
 
+### Secure Cookies
+
+For now, we're going to use secure cookies to store session data. You can choose to use a memory cached method (like Redis or Memcached), or store your sessions in the DB.
+
+Express will look for a secret key `string` for your cookie on application load. You'll need to create a file in `/cookies` called `secret-key.json` and have it contain a random string:
+
+`"THISISASUPERRANDOMAMAZINGSTRING"`
+
+**NOTE**: This directory is `gitignore`'d because it contains sensitive information.
+
 ### Database
 
 This project utilizes [MongoDB](https://www.mongodb.com) for data storage. You'll need to sign up for a MongoDB Atlas cluster [here](https://www.mongodb.com/download-center).
@@ -87,7 +102,7 @@ This project utilizes [MongoDB](https://www.mongodb.com) for data storage. You'l
 Our project will be looking for a database connection string in `/server/db/access/connection-string.json`, which has been `gitignore`'d for this project since it contains sensitive data. You need to create this file using the following template:
 
 `
- "mongodb://{{USERNAME}}:{{PASSWORD}}@{{PRIMARY_NODE}}:27017,{{SECONDARY_NODE_1}}:27017,{{SECONDARY_NODE_2}}:27017/admin?ssl=true&replicaSet={{NODE_MASTER_SOURCE}}-0&authSource=admin"
+ "mongodb://{{USERNAME}}:{{PASSWORD}}@{{PRIMARY_NODE}}:27017,{{SECONDARY_NODE_1}}:27017,{{SECONDARY_NODE_2}}:27017/{{DATABASE_NAME}}?ssl=true&replicaSet={{NODE_MASTER_SOURCE}}-0&authSource=admin"
 `
 
 Further information on connecting to your Atlas instance can be found [here](https://docs.atlas.mongodb.com/driver-connection/#node-js-driver-example) in the section _MongoDB Version 3.4 and earlier_, and by logging into Atlas and checking *Clusters -> Connect -> Connect Your Application.* Replace the code above demarcated by `{{PARAMETER}}` with the necessary information. Once you've established a connection to your database, you'll be able to perform all necessary CRUD operations.
@@ -99,6 +114,8 @@ If you want to avoid installing the entire MongoDB framework on your machine or 
 To access the library of CRUD commands, you'll need to use `require()` in your modules:
 
 `const db = require('../db/db-access');`
+
+**NOTE**: The pathing may vary depending on where your file is located (i.e. `../db/db-access` vs `../../db/db-access`)
 
 You can now call any operation by utilizing `db.{{FUNCTION_NAME}}`.
 
@@ -128,7 +145,7 @@ The `testConnection()` function requires no parameters and will either fail the 
 
 #### Promise-based Database Methods
 
-CRUD operations against the database will return a promise of either `resolve` or `reject`. When calling a promise-based function in an API, you'll need append the call with `.then()` to retrieve the response. All CRUD operations return a `.catch()` when a promise is rejected, and that will need to be accounted for as well. An example:
+CRUD operations against the database will return a promise of either `resolve` or `reject`. When calling a promise-based function in an API, you'll want to append the call with `.then()` to retrieve the response (`updateCollection()` can be an exception depending on circumstance). All CRUD operations return a `.catch()` when a promise is rejected, and that will need to be accounted for as well. An example:
 
 ```
 router.get('/', (req, res) => {

@@ -5,12 +5,15 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const db = require('../../db/db-access');
 
+// MT: To Do- Create a reusable validation function.
+
 /* POST signup information. */
 router.post('/', (req, res) => {
   const signup = {
     email: req.body.signupEmail,
     userName: req.body.signupUsername,
-    password: req.body.signupPassword
+    password: req.body.signupPassword,
+    sessionID: req.sessionID
   };
 
   if (signup.email &&
@@ -19,6 +22,7 @@ router.post('/', (req, res) => {
     typeof signup.email === 'string' &&
     typeof signup.userName === 'string' &&
     typeof signup.password === 'string' &&
+    signup.password.length > 5 &&
     typeof req.body.signupPasswordReentry === 'string' &&
     signup.password === req.body.signupPasswordReentry) {
     // MT: Check the database for an existing email and userName
@@ -47,7 +51,9 @@ router.post('/', (req, res) => {
         });
         db.writeToCollection('Users', signup)
           .then(resolve => {
+            // MT: Store the userId in the session and pass it to the front-end.
             req.session.userId = resolve._id;
+            req.session.save();
 
             res.json({
               status: 'OK',
@@ -66,7 +72,7 @@ router.post('/', (req, res) => {
   } else {
     res.json({
       status: 'ERROR',
-      message: 'All fields must be filled out and the passwords must match.'
+      message: 'All fields must be filled out, and the passwords must match and contain at least 6 characters.'
     });
   }
 });

@@ -1,30 +1,46 @@
 'use strict';
 
 const express = require('express');
-const db = require('./db/db-access');
-// MT: Needed to search by ID. We may move this elsewhere in the future.
-// const ObjectID = require('mongodb').ObjectID;
-const path = require('path');
-// MT: Uncomment when you have a favicon ready to serve.
-// const favicon = require('serve-favicon');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const session = require('express-session');
-
-const index = require('./routes/index');
-const users = require('./routes/users');
+const db = require('./db/db-access');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
 const login = require('./routes/apis/login');
 const signup = require('./routes/apis/signup');
-const profile = require('./routes/profile');
-
+const user = require('./routes/apis/user');
+const index = require('./routes/index');
+const uuidv1 = require('uuid/v1');
+// MT: The path to our secret key for cookie session storage.
+const secretKey = require('./cookies/secret-key.json');
 const app = express();
 
+app.use(express.static(path.join(__dirname, './public')));
+
+app.use(favicon(path.join(__dirname, './public', './favicon.ico')));
+
+// MT: Test our database connection on load
+db.testConnection();
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+app.use(logger('dev'));
+
+const expiryDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
 const userSession = {
-  secret: 'calico combine',
-  resave: true,
-  saveUninitialized: false,
-  cookie: {}
+  genid: () => uuidv1(),
+  secret: secretKey,
+  duration: 30 * 60 * 1000,
+  saveUninitialized: true,
+  resave: false,
+  cookie: {
+    httpOnly: false,
+    secure: false,
+    maxAge: expiryDate
+  }
 };
 
 if (app.get('env') === 'production') {
@@ -34,29 +50,17 @@ if (app.get('env') === 'production') {
 
 app.use(session(userSession));
 
-// MT: Test our database connection on load
-db.testConnection();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-// uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
-
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded(
   { extended: false }
 ));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
+// MT: Define routes here. Routes must be defined after the bodyParser so that we can correctly pass json data from a client-side fetch request.
+app.use('/api/user', user);
 app.use('/api/login', login);
 app.use('/api/signup', signup);
-app.use('/profile', profile);
+// MT: react-router will handle routing on the front-end, so we'll deliver the app files on all non-API requests. The ordering of the server-side routes matter, hence why the APIs are defined above the wildcard ('*') routing.
+app.use('*', index);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
