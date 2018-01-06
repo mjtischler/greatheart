@@ -13,7 +13,8 @@
     "routes",
     "db/db-access.js",
     "public",
-    "views"
+    "views",
+    "session"
   ],
   "env": {
     "NODE_ENV": "development"

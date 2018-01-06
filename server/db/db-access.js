@@ -147,6 +147,7 @@ db.searchCollection = function (collectionName, query) {
 // `collectionName` is the document of your database to which you wish to write and must be a STRING (REQUIRED).
 // `recordID` is STRING key that matches the document's _id (REQUIRED).
 // `updatedRecord` must (TODO: can) be an OBJECT (TODO: or an ARRAY of objects) (REQUIRED).
+// If you need to add a field to a record, use: `db.updateCollection(collectionName, recordID, { $set: { new_key: 'new_value' }});`
 db.updateCollection = function (collectionName, recordID, updatedRecord) {
   return new Promise((resolve, reject) => {
     if (!collectionName || !recordID || !updatedRecord) {

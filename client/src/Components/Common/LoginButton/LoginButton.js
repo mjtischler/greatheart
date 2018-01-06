@@ -68,7 +68,7 @@ class LoginButton extends Component {
           errors: Object.assign(this.state.errors, {loginPassword: error})
         });
         break;
-      case 'All fields must be filled out and the passwords must match.':
+      case 'All fields must be filled out, and the passwords must match and contain at least 6 characters.':
         this.setState({
           errors: Object.assign(this.state.errors, {signupGeneric: error})
         });
@@ -130,6 +130,7 @@ class LoginButton extends Component {
 
     fetch('/api/login', {
       method: 'POST',
+      credentials: 'include',
       body: JSON.stringify({
         loginEmail: this.state.loginEmail,
         loginPassword: this.state.loginPassword
@@ -137,6 +138,8 @@ class LoginButton extends Component {
       headers: {'Content-Type': 'application/json'}
     }).then(response => response.json()).then(response => {
       // MT: A successful login will return a redirected bool of 'true', triggering the loading of the profile page.
+      console.log(response);
+
       if (response.redirected) {
         window.location = '/profile';
       } else {
@@ -150,6 +153,7 @@ class LoginButton extends Component {
 
     fetch('/api/signup', {
       method: 'POST',
+      credentials: 'include',
       body: JSON.stringify({
         signupEmail: this.state.signupEmail,
         signupUsername: this.state.signupUsername,

@@ -7,6 +7,8 @@ const db = require('../../db/db-access');
 
 /* POST login information. */
 router.post('/', (req, res) => {
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
   const login = {
     email: req.body.loginEmail,
     password: req.body.loginPassword
@@ -20,7 +22,11 @@ router.post('/', (req, res) => {
       .then(resolve => {
         bcrypt.compare(login.password, resolve.result[0].password, (err, result) => {
           if (result === true) {
+            // MT: Store the userId in the session and pass it to the front-end.
             req.session.userId = resolve.result[0]._id;
+            // MT: Save the sessionID to the user's record in the database. TODO: Resolve the promise with .then() and .catch().
+            db.updateCollection('Users', resolve.result[0]._id, { $set: {sessionID: req.sessionID }});
+            req.session.save();
 
             return res.json({
               status: 'OK',
