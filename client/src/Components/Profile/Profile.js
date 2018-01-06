@@ -1,14 +1,37 @@
 import React, { Component } from 'react';
+import CircularProgress from 'material-ui/CircularProgress';
 import './Profile.css';
 
+const styles = {
+  progressLoader: {
+    position: 'absolute',
+    top: '44%',
+    left: '48%'
+  }
+};
+
 class Profile extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      loaded: false,
+      profileData: []
+    };
+  }
+
   componentDidMount () {
     fetch('/api/user', {
       method: 'GET',
       credentials: 'include'
     }).then(response => response.json()).then(response => {
       if (response.status === 'OK') {
-        console.log('RESPONSE', response);
+        const profileData = [];
+        profileData.push(response.result);
+
+        this.setState({
+          loaded: true,
+          profileData
+        });
       } else {
         window.location = '/';
       }
@@ -16,13 +39,24 @@ class Profile extends Component {
   }
 
   render () {
+    if (!this.state.loaded) {
+      return <CircularProgress
+              size={80}
+              thickness={7}
+              style={styles.progressLoader}
+             />;
+    }
+
     return (
       <div>
         <header className="Profile-header">
           <h1 className="Profile-title">Welcome to Greatheart</h1>
         </header>
         <p>
-          Welcome to your profile!
+          Welcome to your profile,
+          {this.state.profileData.map(profile =>
+            <span key={profile.userId}>{profile.userName}, {profile.email}</span>
+          )}
         </p>
       </div>
     );

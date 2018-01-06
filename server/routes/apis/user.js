@@ -15,7 +15,11 @@ router.get('/', (req, res) => {
 
       res.json({
         status: 'OK',
-        result: resolve.result[0].userName
+        result: {
+          userId: resolve.result[0]._id,
+          userName: resolve.result[0].userName,
+          email: resolve.result[0].email
+        }
       });
     })
     .catch(reject => {
