@@ -22,6 +22,13 @@ router.post('/', (req, res) => {
       .then(resolve => {
         bcrypt.compare(login.password, resolve.result[0].password, (err, result) => {
           if (result === true) {
+            // MT: Check to see if user is flagged in the system because of potential breach attempts.
+            if (resolve.result[0].isFlagged === 'true') {
+              return res.json({
+                status: 'ERROR',
+                message: 'Your account has been disabled. Please contact admin@greatheart.com for further information.'
+              });
+            }
             // MT: Set admin flag.
             if (resolve.result[0].isAdmin === 'true') {
               req.session.isAdmin = resolve.result[0].isAdmin;

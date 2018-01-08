@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import CircularProgress from 'material-ui/CircularProgress';
 import LogoutButton from '../Common/LogoutButton/LogoutButton';
+import AddPost from './Components/AddPost/AddPost';
+import {Card, CardHeader} from 'material-ui/Card';
 import './Profile.css';
 
 const styles = {
@@ -48,18 +50,46 @@ class Profile extends Component {
              />;
     }
 
+    if (this.state.profileData[0].isAdmin) {
+      return (
+        <div>
+          <header className="Profile-header">
+            <h1 className="Profile-title">Greatheart</h1>
+            <LogoutButton></LogoutButton>
+          </header>
+          <div className="Profile-container">
+            <AddPost></AddPost>
+            <Card>
+              {this.state.profileData.map(profile =>
+                <CardHeader
+                  key={profile.userId}
+                  title={profile.userName}
+                  subtitle={profile.email}
+                />
+              )}
+            </Card>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div>
         <header className="Profile-header">
           <h1 className="Profile-title">Greatheart</h1>
           <LogoutButton></LogoutButton>
         </header>
-        <p>
-          Welcome to your profile,
-          {this.state.profileData.map(profile =>
-            <span key={profile.userId}>{profile.userName}, {profile.email}</span>
-          )}
-        </p>
+        <div className="Profile-container">
+          <Card>
+            {this.state.profileData.map(profile =>
+              <CardHeader
+                key={profile.userId}
+                title={profile.userName}
+                subtitle={profile.email}
+              />
+            )}
+          </Card>
+        </div>
       </div>
     );
   }
