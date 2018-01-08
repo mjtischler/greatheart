@@ -7,9 +7,11 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-const login = require('./routes/apis/login');
-const signup = require('./routes/apis/signup');
+const posts = require('./routes/apis/posts');
 const user = require('./routes/apis/user');
+const login = require('./routes/apis/login');
+const logout = require('./routes/apis/logout');
+const signup = require('./routes/apis/signup');
 const index = require('./routes/index');
 const uuidv1 = require('uuid/v1');
 // MT: The path to our secret key for cookie session storage.
@@ -56,8 +58,10 @@ app.use(bodyParser.urlencoded(
 ));
 
 // MT: Define routes here. Routes must be defined after the bodyParser so that we can correctly pass json data from a client-side fetch request.
+app.use('/api/posts', posts);
 app.use('/api/user', user);
 app.use('/api/login', login);
+app.use('/api/logout', logout);
 app.use('/api/signup', signup);
 // MT: react-router will handle routing on the front-end, so we'll deliver the app files on all non-API requests. The ordering of the server-side routes matter, hence why the APIs are defined above the wildcard ('*') routing.
 app.use('*', index);

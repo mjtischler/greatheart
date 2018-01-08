@@ -22,10 +22,16 @@ router.post('/', (req, res) => {
       .then(resolve => {
         bcrypt.compare(login.password, resolve.result[0].password, (err, result) => {
           if (result === true) {
+            // MT: Set admin flag.
+            if (resolve.result[0].isAdmin === 'true') {
+              req.session.isAdmin = resolve.result[0].isAdmin;
+            } else {
+              req.session.isAdmin = 'false';
+            }
             // MT: Store the userId in the session and pass it to the front-end.
             req.session.userId = resolve.result[0]._id;
             // MT: Save the sessionID to the user's record in the database. TODO: Resolve the promise with .then() and .catch().
-            db.updateCollection('Users', resolve.result[0]._id, { $set: {sessionID: req.sessionID }});
+            db.updateCollection('Users', resolve.result[0]._id, { $set: { sessionID: req.sessionID }});
             req.session.save();
 
             return res.json({

@@ -1,0 +1,12 @@
+.LogoutButton-container {
+  float: right;
+}
+
+.LogoutButton-button {
+  padding: 10px;
+}
+
+.LogoutButton-menu-button {
+  float: right;
+  margin-top: 8px;
+}

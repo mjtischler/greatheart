@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CircularProgress from 'material-ui/CircularProgress';
+import LogoutButton from '../Common/LogoutButton/LogoutButton';
 import './Profile.css';
 
 const styles = {
@@ -50,7 +51,8 @@ class Profile extends Component {
     return (
       <div>
         <header className="Profile-header">
-          <h1 className="Profile-title">Welcome to Greatheart</h1>
+          <h1 className="Profile-title">Greatheart</h1>
+          <LogoutButton></LogoutButton>
         </header>
         <p>
           Welcome to your profile,
