@@ -9,3 +9,10 @@
   float: left;
   font-size: 1.5em;
 }
+
+.Profile-container {
+  display: grid;
+  grid-template-columns: 66% 33%;
+  grid-gap: 10px;
+  margin: 10px;
+}

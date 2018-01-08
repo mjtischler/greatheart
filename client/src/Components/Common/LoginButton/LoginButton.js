@@ -138,10 +138,12 @@ class LoginButton extends Component {
       headers: {'Content-Type': 'application/json'}
     }).then(response => response.json()).then(response => {
       // MT: A successful login will return a redirected bool of 'true', triggering the loading of the profile page.
-      console.log(response);
-
       if (response.redirected) {
         window.location = '/profile';
+      } else if (response.message) {
+        // MT: If we receive a message, it means that the user's account has been disabled. Alert them, then redirect.
+        alert(response.message);
+        window.location = '/';
       } else {
         this.handleValidationErrors(response.message);
       }

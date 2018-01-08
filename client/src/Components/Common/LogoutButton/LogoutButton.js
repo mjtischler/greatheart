@@ -10,10 +10,6 @@ const styles = {
 };
 
 class LogoutButton extends Component {
-  constructor (props) {
-    super(props);
-  }
-
   handleMasterButtonClick (event) {
     // This prevents ghost click.
     event.preventDefault();
