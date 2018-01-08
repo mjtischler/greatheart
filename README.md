@@ -24,8 +24,8 @@ A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in
 
 ### To Do
 - ~~Correctly store login session~~
-- Create logout feature
-- Regex signup email addresses for `@`
+- ~~Create logout feature~~
+- ~~Regex signup email addresses for @~~ **NOTE**: Since we'll eventually validate emails, there's no need to do all the regex required for this.
 
 ### Me
 

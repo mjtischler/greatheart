@@ -12,13 +12,13 @@ router.get('/', (req, res) => {
     .then(resolve => {
       // MT: Commenting out for now, but may be useful in the future.
       // console.log(req.session.userId, req.sessionID);
-
       res.json({
         status: 'OK',
         result: {
           userId: resolve.result[0]._id,
           userName: resolve.result[0].userName,
-          email: resolve.result[0].email
+          email: resolve.result[0].email,
+          isAdmin: resolve.result[0].isAdmin ? true : false
         }
       });
     })
