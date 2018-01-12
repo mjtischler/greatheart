@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import InfoModal from '../../../Common/InfoModal/InfoModal'
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import './AddPost.css';
@@ -16,7 +17,10 @@ class AddPost extends Component {
 
     this.state = {
       postHeaderText: null,
-      postBodyText: null
+      postBodyText: null,
+      openModal: false,
+      status: null,
+      message: null
     };
 
     this.handleTextFieldChange = this.handleTextFieldChange.bind(this);
@@ -45,8 +49,19 @@ class AddPost extends Component {
       if (response.redirected === 'true') {
         alert('Post added successfully!')
         window.location = '/profile'
+      } else if (response.status === 'ERROR') {
+        this.setState({
+          openModal: true,
+          status: response.status,
+          message: response.message
+        });
       } else {
-        alert(response.message);
+        this.setState({
+          openModal: true,
+          status: 'ERROR',
+          message: 'An unknown error occurred.'
+        });
+        window.location = '/profile'
       }
     });
   }
@@ -57,6 +72,11 @@ class AddPost extends Component {
   render () {
     return (
       <div>
+        <InfoModal
+          open={this.state.openModal}
+          status={this.state.status}
+          message={this.state.message}
+        />
         <Card>
           <CardHeader
             title="Add Post"
