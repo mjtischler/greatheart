@@ -28,7 +28,7 @@ A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in
 - ~~Regex signup email addresses for @~~ **NOTE**: Since we'll eventually validate emails, there's no need to do all the regex required for this.
 - ~~Create ability to add a post.~~
 - ~~Flag non-admin users who attempt to add posts.~~
-- Change alert boxes to Material-UI dialogs.
+- ~~Change alert boxes to Material-UI dialogs.~~
 
 ### Me
 

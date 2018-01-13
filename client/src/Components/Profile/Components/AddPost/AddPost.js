@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
-import InfoModal from '../../../Common/InfoModal/InfoModal'
+import InfoModal from '../../../Common/InfoModal/InfoModal';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import './AddPost.css';
@@ -20,7 +20,8 @@ class AddPost extends Component {
       postBodyText: null,
       openModal: false,
       status: null,
-      message: null
+      message: null,
+      redirectLocation: null
     };
 
     this.handleTextFieldChange = this.handleTextFieldChange.bind(this);
@@ -28,6 +29,14 @@ class AddPost extends Component {
   }
 
   handleTextFieldChange ({target}) {
+    // MT: Reset the error message once the modal has been closed.
+    if (this.state.openModal && this.state.status && this.state.message) {
+      this.setState({
+        openModal: false,
+        status: null,
+        message: null
+      });
+    }
     this.setState({
       [target.id]: target.value
     });
@@ -47,8 +56,12 @@ class AddPost extends Component {
       headers: {'Content-Type': 'application/json'}
     }).then(response => response.json()).then(response => {
       if (response.redirected === 'true') {
-        alert('Post added successfully!')
-        window.location = '/profile'
+        this.setState({
+          openModal: true,
+          status: 'WELL DONE!',
+          message: 'Your post was added successfully.',
+          redirectLocation: '/profile'
+        });
       } else if (response.status === 'ERROR') {
         this.setState({
           openModal: true,
@@ -59,10 +72,17 @@ class AddPost extends Component {
         this.setState({
           openModal: true,
           status: 'ERROR',
-          message: 'An unknown error occurred.'
+          message: 'An unknown error occurred. Dang.',
+          redirectLocation: '/profile'
         });
-        window.location = '/profile'
       }
+    }).catch(() => {
+      this.setState({
+        openModal: true,
+        status: 'ERROR',
+        message: 'There was an issue communicating with the server. We\'re gonna send you home now.',
+        redirectLocation: '/'
+      });
     });
   }
 
@@ -72,11 +92,17 @@ class AddPost extends Component {
   render () {
     return (
       <div>
-        <InfoModal
-          open={this.state.openModal}
-          status={this.state.status}
-          message={this.state.message}
-        />
+        {/*
+          MT: Render the modal when the AddPost's openModal state changes, and pass the necessary properties into the dialog.
+        */}
+        {this.state.openModal ?
+          <InfoModal
+            open={this.state.openModal}
+            status={this.state.status}
+            message={this.state.message}
+            redirectLocation={this.state.redirectLocation}
+          /> : false
+        }
         <Card>
           <CardHeader
             title="Add Post"
@@ -87,12 +113,12 @@ class AddPost extends Component {
             style={styles.postHeader}
             onChange={this.handleTextFieldChange}
           /><br />
-        <textarea
-          id="postBodyText"
-          className="AddPost-post-body"
-          placeholder="Your post..."
-          onChange={this.handleTextFieldChange}>
-        </textarea>
+          <textarea
+            id="postBodyText"
+            className="AddPost-post-body"
+            placeholder="Your post..."
+            onChange={this.handleTextFieldChange}>
+          </textarea>
           <CardText>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
@@ -100,7 +126,7 @@ class AddPost extends Component {
             Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
           </CardText>
           <CardActions>
-              <RaisedButton primary={true} label="Submit Post" onClick={this.handleSubmitPostButtonClick} />
+            <RaisedButton primary={true} label="Submit Post" onClick={this.handleSubmitPostButtonClick} />
           </CardActions>
         </Card>
       </div>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
+import InfoModal from '../InfoModal/InfoModal';
 import './LogoutButton.css';
 
 const styles = {
@@ -10,6 +11,19 @@ const styles = {
 };
 
 class LogoutButton extends Component {
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      openModal: false,
+      status: null,
+      message: null,
+      redirectLocation: null
+    };
+
+    this.handleMasterButtonClick = this.handleMasterButtonClick.bind(this);
+  }
+
   handleMasterButtonClick (event) {
     // This prevents ghost click.
     event.preventDefault();
@@ -22,18 +36,39 @@ class LogoutButton extends Component {
       if (response.redirected) {
         window.location = '/';
       } else {
-        alert('There was an error logging out.');
-        window.location = '/';
+        this.setState({
+          openModal: true,
+          status: 'ERROR',
+          message: 'There was an issue logging you out. Whoops!',
+          redirectLocation: '/'
+        });
       }
+    }).catch(() => {
+      this.setState({
+        openModal: true,
+        status: 'ERROR',
+        message: 'There was an issue logging you out. Whoops!',
+        redirectLocation: '/'
+      });
     });
   }
 
   render () {
     return (
-      <div className="LogoutButton-container">
-        <RaisedButton primary={true} style={styles.button} onClick={this.handleMasterButtonClick}>
-          Log out
-        </RaisedButton>
+      <div>
+        {this.state.openModal ?
+          <InfoModal
+            open={this.state.openModal}
+            status={this.state.status}
+            message={this.state.message}
+            redirectLocation={this.state.redirectLocation}
+          /> : false
+        }
+        <div className="LogoutButton-container">
+          <RaisedButton primary={true} style={styles.button} onClick={this.handleMasterButtonClick}>
+            Log out
+          </RaisedButton>
+        </div>
       </div>
     );
   }

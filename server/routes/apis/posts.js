@@ -2,16 +2,25 @@
 
 const express = require('express');
 const router = express.Router();
-// MT: Commented out until we pull posts from the DB.
-// const db = require('../../db/db-access');
-// MT: Since we're going to retrieve the user's data via their id that is stored in the cookie, we need this function from mongodb.
-// const ObjectID = require('mongodb').ObjectID;
+const db = require('../../db/db-access');
 
 // MT: Get posts
 router.get('/', (req, res) => {
-  res.json({
-    gotPosts: 'OK'
-  });
+  db.searchCollection('Posts', null, { postAuthorUserId: 0 }, true)
+    .then(resolve => {
+      res.json({
+        status: 'OK',
+        posts: resolve.result
+      });
+    })
+    .catch(reject => {
+      console.log('Error retrieving posts: ', reject);
+
+      res.json({
+        status: 'ERROR',
+        result: 'There was an error retrieving the posts.'
+      });
+    });
 });
 
 module.exports = router;

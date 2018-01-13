@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import InfoModal from '../InfoModal/InfoModal';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
@@ -36,7 +37,11 @@ class LoginButton extends Component {
         signupGeneric: null,
         signupEmail: null,
         signupUsername: null
-      }
+      },
+      openModal: false,
+      status: null,
+      message: null,
+      redirectLocation: null
     };
 
     this.handleValidationErrors = this.handleValidationErrors.bind(this);
@@ -142,11 +147,24 @@ class LoginButton extends Component {
         window.location = '/profile';
       } else if (response.message) {
         // MT: If we receive a message, it means that the user's account has been disabled. Alert them, then redirect.
-        alert(response.message);
-        window.location = '/';
+        this.setState({
+          open: false,
+          openModal: true,
+          status: response.status,
+          message: response.message,
+          redirectLocation: '/'
+        });
       } else {
         this.handleValidationErrors(response.message);
       }
+    }).catch(() => {
+      this.setState({
+        open: false,
+        openModal: true,
+        status: 'ERROR',
+        message: 'Oh no! There was an issue logging you in.',
+        redirectLocation: '/'
+      });
     });
   }
 
@@ -175,85 +193,95 @@ class LoginButton extends Component {
 
   render () {
     return (
-      <div className="LoginButton-container">
-        <RaisedButton primary={true} style={styles.button} onClick={this.handleMasterButtonClick}>
-          Login or Signup
-        </RaisedButton>
+      <div>
+        {this.state.openModal ?
+          <InfoModal
+            open={this.state.openModal}
+            status={this.state.status}
+            message={this.state.message}
+            redirectLocation={this.state.redirectLocation}
+          /> : false
+        }
+        <div className="LoginButton-container">
+          <RaisedButton primary={true} style={styles.button} onClick={this.handleMasterButtonClick}>
+            Login or Signup
+          </RaisedButton>
 
-        <Popover
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'right', vertical: 'top'}}
-          onRequestClose={this.handleRequestClose}
-        >
-          <Menu>
-            <div className="LoginButton-login-pane">
-              <TextField
-                id="loginEmail"
-                className="LoginButton-textfield"
-                hintText="Email"
-                fullWidth={true}
-                type="text"
-                onChange={this.handleTextFieldChange}
-                errorText={this.state.errors.loginEmail}
-              /><br />
-              <TextField
-                id="loginPassword"
-                className="LoginButton-textfield"
-                hintText="Password"
-                fullWidth={true}
-                type="password"
-                onChange={this.handleTextFieldChange}
-                errorText={this.state.errors.loginPassword}
-              /><br />
-              <RaisedButton primary={true} className="LoginButton-menu-button" onClick={this.handleLoginButtonClick}>
-                Login
-              </RaisedButton>
-            </div>
-            <Divider style={styles.divider}/>
-            <div className="LoginButton-signup-pane">
-              <TextField
-                id="signupEmail"
-                className="LoginButton-textfield"
-                hintText="Email"
-                fullWidth={true}
-                type="text"
-                onChange={this.handleTextFieldChange}
-                errorText={this.state.errors.signupEmail}
-              /><br />
-              <TextField
-                id="signupUsername"
-                className="LoginButton-textfield"
-                hintText="Username"
-                fullWidth={true}
-                type="text"
-                onChange={this.handleTextFieldChange}
-                errorText={this.state.errors.signupUsername}
-              /><br />
-              <TextField
-                id="signupPassword"
-                className="LoginButton-textfield"
-                hintText="Password"
-                fullWidth={true}
-                type="password"
-                onChange={this.handleTextFieldChange}
-              /><br />
-              <TextField
-                id="signupPasswordReentry"
-                className="LoginButton-textfield"
-                hintText="Repeat Password"
-                fullWidth={true}
-                type="password"
-                onChange={this.handleTextFieldChange}
-                errorText={this.state.errors.signupGeneric}
-              /><br />
-              <RaisedButton primary={true} className="LoginButton-menu-button" onClick={this.handleSignupButtonClick}>
-                Sign Up
-              </RaisedButton>
-            </div>
-          </Menu>
-        </Popover>
+          <Popover
+            open={this.state.open}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+            targetOrigin={{horizontal: 'right', vertical: 'top'}}
+            onRequestClose={this.handleRequestClose}
+          >
+            <Menu>
+              <div className="LoginButton-login-pane">
+                <TextField
+                  id="loginEmail"
+                  className="LoginButton-textfield"
+                  hintText="Email"
+                  fullWidth={true}
+                  type="text"
+                  onChange={this.handleTextFieldChange}
+                  errorText={this.state.errors.loginEmail}
+                /><br />
+                <TextField
+                  id="loginPassword"
+                  className="LoginButton-textfield"
+                  hintText="Password"
+                  fullWidth={true}
+                  type="password"
+                  onChange={this.handleTextFieldChange}
+                  errorText={this.state.errors.loginPassword}
+                /><br />
+                <RaisedButton primary={true} className="LoginButton-menu-button" onClick={this.handleLoginButtonClick}>
+                  Login
+                </RaisedButton>
+              </div>
+              <Divider style={styles.divider}/>
+              <div className="LoginButton-signup-pane">
+                <TextField
+                  id="signupEmail"
+                  className="LoginButton-textfield"
+                  hintText="Email"
+                  fullWidth={true}
+                  type="text"
+                  onChange={this.handleTextFieldChange}
+                  errorText={this.state.errors.signupEmail}
+                /><br />
+                <TextField
+                  id="signupUsername"
+                  className="LoginButton-textfield"
+                  hintText="Username"
+                  fullWidth={true}
+                  type="text"
+                  onChange={this.handleTextFieldChange}
+                  errorText={this.state.errors.signupUsername}
+                /><br />
+                <TextField
+                  id="signupPassword"
+                  className="LoginButton-textfield"
+                  hintText="Password"
+                  fullWidth={true}
+                  type="password"
+                  onChange={this.handleTextFieldChange}
+                /><br />
+                <TextField
+                  id="signupPasswordReentry"
+                  className="LoginButton-textfield"
+                  hintText="Repeat Password"
+                  fullWidth={true}
+                  type="password"
+                  onChange={this.handleTextFieldChange}
+                  errorText={this.state.errors.signupGeneric}
+                /><br />
+                <RaisedButton primary={true} className="LoginButton-menu-button" onClick={this.handleSignupButtonClick}>
+                  Sign Up
+                </RaisedButton>
+              </div>
+            </Menu>
+          </Popover>
+        </div>
       </div>
     );
   }

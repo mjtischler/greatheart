@@ -37,8 +37,17 @@ router.post('/', (req, res) => {
             }
             // MT: Store the userId in the session and pass it to the front-end.
             req.session.userId = resolve.result[0]._id;
-            // MT: Save the sessionID to the user's record in the database. TODO: Resolve the promise with .then() and .catch().
-            db.updateCollection('Users', resolve.result[0]._id, { $set: { sessionID: req.sessionID }});
+            // MT: Save the sessionID to the user's record in the database, set the login time, and increase the number of logins.
+            // TO DO: Resolve the promise with .then() and .catch().
+            db.updateCollection('Users', resolve.result[0]._id, {
+              $set: {
+                sessionID: req.sessionID,
+                lastLogin: new Date().toISOString()
+              },
+              $inc: {
+                numberOfLogins: 1
+              }
+            });
             req.session.save();
 
             return res.json({
