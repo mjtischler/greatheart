@@ -13,7 +13,9 @@ router.post('/', (req, res) => {
     email: req.body.signupEmail,
     userName: req.body.signupUsername,
     password: req.body.signupPassword,
-    sessionID: req.sessionID
+    sessionID: req.sessionID,
+    lastLogin: new Date().toISOString(),
+    numberOfLogins: 1
   };
 
   if (signup.email &&

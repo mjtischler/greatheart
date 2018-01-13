@@ -8,9 +8,12 @@ const ObjectID = require('mongodb').ObjectID;
 
 // MT: Add a post
 router.post('/', (req, res) => {
+  console.log(req);
   const addedPost = {
     postHeaderText: req.body.postHeaderText,
-    postBodyText: req.body.postBodyText
+    postBodyText: req.body.postBodyText,
+    postAuthorUserId: req.session.userId,
+    postCreationDate: new Date().toISOString()
   };
 
   if (addedPost.postHeaderText &&

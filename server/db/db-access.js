@@ -99,7 +99,8 @@ db.writeToCollection = function (collectionName, newRecord, isInsertingMultiple)
 // MT: `searchCollection()` is used for returning records from a collection based on a query.
 // `collectionName` is the document of your database through which you wish to search and must be a STRING (REQUIRED).
 // `query` is an OBJECT that matches the collection's data structure (i.e. the key/pair for which you're searching). Not passing a `query` will return the entire collection.
-db.searchCollection = function (collectionName, query) {
+// `projection` is an OBJECT mostly used for excluding and including specific results, and uses a value of 0 or 1 to determine the documents to return. In most cases, you pass in `null` as the `query` (e.g. `db.searchCollection('Posts', null, { postAuthorUserId: 0 })` would return all matching documents but exclude the postAuthorUserId from the results).
+db.searchCollection = function (collectionName, query, projection) {
   return new Promise((resolve, reject) => {
     if (!collectionName) {
       db.response.status = 'ERROR';
@@ -114,7 +115,7 @@ db.searchCollection = function (collectionName, query) {
           const database = client.db(databaseName);
           let message;
 
-          database.collection(collectionName).find(query).toArray((findErr, docs) => {
+          database.collection(collectionName).find(query, projection).toArray((findErr, docs) => {
             if (findErr) {
               throw new Error('An error occured while attempting to find a record: ', findErr);
             } else if (!docs.length) {

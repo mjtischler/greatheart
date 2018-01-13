@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
+// MT: A resuable modal for sitewide application.
 class InfoModal extends Component {
   constructor (props) {
     super(props);
@@ -10,23 +11,28 @@ class InfoModal extends Component {
     this.state = {
       open: props.open,
       status: props.status,
-      message: props.message
+      message: props.message,
+      redirectLocation: props.redirectLocation
     };
 
     this.handleClose = this.handleClose.bind(this);
   }
 
-  // MT: If the component is expecting properties, we need to prepare it to do so. This will watch for incoming properties and adjust the state accordingly.
-  componentWillReceiveProps (nextProps) {
+  componentDidMount () {
     this.setState({
-      open: nextProps.open,
-      status: nextProps.status,
-      message: nextProps.message
+      open: this.props.open,
+      status: this.props.status,
+      message: this.props.message,
+      redirectLocation: this.props.redirectLocation
     });
   }
 
   handleClose () {
     this.setState({open: false});
+
+    if (this.state.redirectLocation) {
+      window.location = this.state.redirectLocation;
+    }
   }
 
   render () {
@@ -55,9 +61,10 @@ class InfoModal extends Component {
 }
 
 InfoModal.propTypes = {
-  open: PropTypes.bool,
-  status: PropTypes.string,
-  message: PropTypes.string
+  open: PropTypes.bool.isRequired,
+  status: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+  redirectLocation: PropTypes.string
 };
 
 export default InfoModal;

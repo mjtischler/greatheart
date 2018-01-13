@@ -16,9 +16,14 @@ const styles = {
 class Profile extends Component {
   constructor (props) {
     super(props);
+
     this.state = {
       loaded: false,
-      profileData: []
+      profileData: [],
+      openModal: false,
+      status: null,
+      message: null,
+      redirectLocation: null
     };
   }
 
@@ -38,16 +43,18 @@ class Profile extends Component {
       } else {
         window.location = '/';
       }
+    }).catch(() => {
+      window.location = '/';
     });
   }
 
   render () {
     if (!this.state.loaded) {
       return <CircularProgress
-              size={80}
-              thickness={7}
-              style={styles.progressLoader}
-             />;
+        size={80}
+        thickness={7}
+        style={styles.progressLoader}
+      />;
     }
 
     if (this.state.profileData[0].isAdmin) {
