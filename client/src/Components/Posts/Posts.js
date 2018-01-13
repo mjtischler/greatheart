@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-// import Paper from 'material-ui/Paper';
+import PropTypes from 'prop-types';
+import CircularProgress from 'material-ui/CircularProgress';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import SharedStyles from '../../Styles/SharedStyles';
 import './Posts.css';
 
 const postStyle = {
-  height: 100,
-  width: 100,
   margin: 20,
-  textAlign: 'center',
+  textAlign: 'left',
   display: 'inline-block',
 };
 
@@ -14,8 +15,8 @@ class Posts extends Component {
   constructor (props) {
     super(props);
 
-    // MT: An empty state for future use.
     this.state = {
+      loaded: false,
       posts: []
     };
   }
@@ -25,9 +26,12 @@ class Posts extends Component {
       method: 'GET'
     }).then(response => response.json()).then(response => {
       // MT: We don't want to alter the state, we want to concat our return to the new state.
-      this.setState(previousState => ({
-        posts: previousState.posts.concat(response.posts)
-      }));
+      if (response.posts.length) {
+        this.setState(previousState => ({
+          posts: previousState.posts.concat(response.posts),
+          loaded: true
+        }));
+      }
     })
     .catch(reject => {
       // MT: Temporary
@@ -36,21 +40,34 @@ class Posts extends Component {
   }
 
   render () {
+    if (!this.state.loaded) {
+      return <CircularProgress
+        size={80}
+        thickness={7}
+        style={this.props.sharedStyles.progressLoader}
+      />;
+    }
+
     return (
       <div>
-        {this.state.posts.map(posts =>
-           <div key={ posts._id } style={ postStyle }>
-            <p>
-              { posts.postHeaderText }
-            </p>
-            <p>
-              { posts.postBodyText }
-            </p>
-          </div>
-        )}
+        { this.state.loaded ?
+            this.state.posts.map(posts =>
+              <Card key={ posts._id } style={ postStyle }>
+                <CardTitle title={ posts.postHeaderText }/>
+                <CardText>
+                  { posts.postBodyText }
+                </CardText>
+              </Card>
+            )
+          : <div>There are no posts.</div>
+        }
       </div>
     );
   }
 }
+
+Posts.propTypes = {
+  sharedStyles: PropTypes.object
+};
 
 export default Posts;
