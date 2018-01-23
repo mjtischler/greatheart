@@ -18,8 +18,14 @@ router.post('/', (req, res) => {
 
   if (addedPost.postHeaderText &&
     addedPost.postBodyText &&
+    addedPost.postAuthorUserId &&
+    addedPost.postAuthorName &&
+    addedPost.postCreationDate &&
     typeof addedPost.postHeaderText === 'string' &&
     typeof addedPost.postBodyText === 'string' &&
+    typeof addedPost.postAuthorUserId === 'string' &&
+    typeof addedPost.postAuthorName === 'string' &&
+    typeof addedPost.postCreationDate === 'string' &&
     addedPost.postHeaderText.length > 1 &&
     addedPost.postBodyText.length > 1) {
     db.searchCollection('Users', {_id: ObjectID(req.session.userId)})
