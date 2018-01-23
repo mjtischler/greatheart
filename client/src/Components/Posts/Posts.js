@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from 'material-ui/CircularProgress';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import SharedStyles from '../../Styles/SharedStyles';
+import {Card, CardHeader, CardTitle, CardText} from 'material-ui/Card';
+import { getLocalDate } from '../../Utils/SharedUtils';
 import './Posts.css';
 
 const postStyle = {
@@ -26,16 +26,36 @@ class Posts extends Component {
       method: 'GET'
     }).then(response => response.json()).then(response => {
       // MT: We don't want to alter the state, we want to concat our return to the new state.
-      if (response.posts.length) {
+      if (response.status === 'OK') {
         this.setState(previousState => ({
           posts: previousState.posts.concat(response.posts),
+          loaded: true
+        }));
+      } else {
+        this.setState(previousState => ({
+          posts: previousState.posts.concat([
+            {
+              _id: '1',
+              postHeaderText: 'We\'re Sorry!',
+              postBodyText: 'There are no posts.'
+            }
+          ]),
           loaded: true
         }));
       }
     })
     .catch(reject => {
-      // MT: Temporary
-      console.log('Error: ', reject);
+      this.setState(previousState => ({
+        posts: previousState.posts.concat([
+          {
+            _id: '1',
+            postHeaderText: 'Whoops!',
+            postBodyText: 'An error occured while loading posts.',
+            rejectMessage: reject.message
+          }
+        ]),
+        loaded: true
+      }));
     });
   }
 
@@ -54,6 +74,9 @@ class Posts extends Component {
             this.state.posts.map(posts =>
               <Card key={ posts._id } style={ postStyle }>
                 <CardTitle title={ posts.postHeaderText }/>
+                <CardHeader
+                  subtitle={ `${posts.postAuthorName} on ${getLocalDate(posts.postCreationDate)}` }
+                />
                 <CardText>
                   { posts.postBodyText }
                 </CardText>

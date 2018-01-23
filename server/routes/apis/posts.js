@@ -6,7 +6,8 @@ const db = require('../../db/db-access');
 
 // MT: Get posts
 router.get('/', (req, res) => {
-  db.searchCollection('Posts', null, { postAuthorUserId: 0 }, true)
+  // MT: Let's pass in the collectionName, a null query object, the field to remove, and the sort order (newest first).
+  db.searchCollection('Posts', null, { fields: { postAuthorUserId: 0 }}, { postCreationDate: -1 })
     .then(resolve => {
       res.json({
         status: 'OK',
