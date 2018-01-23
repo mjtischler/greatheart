@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CircularProgress from 'material-ui/CircularProgress';
 import LogoutButton from '../Common/LogoutButton/LogoutButton';
 import AddPost from './Components/AddPost/AddPost';
 import {Card, CardHeader} from 'material-ui/Card';
 import './Profile.css';
-
-const styles = {
-  progressLoader: {
-    position: 'absolute',
-    top: '44%',
-    left: '48%'
-  }
-};
 
 class Profile extends Component {
   constructor (props) {
@@ -53,7 +46,7 @@ class Profile extends Component {
       return <CircularProgress
         size={80}
         thickness={7}
-        style={styles.progressLoader}
+        style={this.props.sharedStyles.progressLoader}
       />;
     }
 
@@ -101,5 +94,9 @@ class Profile extends Component {
     );
   }
 }
+
+Profile.propTypes = {
+  sharedStyles: PropTypes.object
+};
 
 export default Profile;
