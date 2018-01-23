@@ -19,11 +19,16 @@ router.post('/', (req, res) => {
   };
 
   if (signup.email &&
-    signup.password &&
     signup.userName &&
+    signup.password &&
+    signup.sessionID &&
+    signup.lastLogin &&
+    signup.numberOfLogins === 1 &&
     typeof signup.email === 'string' &&
     typeof signup.userName === 'string' &&
     typeof signup.password === 'string' &&
+    typeof signup.sessionID === 'string' &&
+    typeof signup.lastLogin === 'string' &&
     signup.password.length > 5 &&
     typeof req.body.signupPasswordReentry === 'string' &&
     signup.password === req.body.signupPasswordReentry) {
