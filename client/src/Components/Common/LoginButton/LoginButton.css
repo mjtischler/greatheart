@@ -1,15 +1,14 @@
-.LoginButton-container {
-  float: right;
-}
-
 .LoginButton-button {
   padding: 10px;
+}
+
+.Login-menu {
+  width: 336px;
 }
 
 .LoginButton-login-pane,
 .LoginButton-signup-pane {
   padding: 10px;
-  width: 256px;
 }
 
 .LoginButton-login-pane {

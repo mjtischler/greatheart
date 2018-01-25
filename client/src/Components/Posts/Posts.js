@@ -8,7 +8,6 @@ import './Posts.css';
 const postStyle = {
   margin: 20,
   textAlign: 'left',
-  display: 'inline-block',
 };
 
 class Posts extends Component {

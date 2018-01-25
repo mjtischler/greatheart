@@ -49,19 +49,20 @@ class Home extends Component {
     }
 
     return (
-      <div>
+      <div className="Home">
         <header className="Home-header">
-          <h1 className="Home-title">Greatheart</h1>
-          { this.state.isLoggedIn ? <LogoutButton></LogoutButton> : <LoginButton></LoginButton> }
+          <div className="Home-title">Greatheart</div>
+          <div className="Home-accountButton">
+            { this.state.isLoggedIn ? <LogoutButton></LogoutButton> : <LoginButton></LoginButton> }
+          </div>
         </header>
-        { this.state.isLoggedIn ? null :
-          <p className="Home-intro">
-            Please sign up for an account or login above.
-          </p>
-        }
-        <Posts
-          sharedStyles={this.props.sharedStyles}
-        />
+        <div className="Home-posts">
+          <Posts
+            sharedStyles={ this.props.sharedStyles }
+          />
+        </div>
+        <div className="Home-sidebar"></div>
+        <div className="Home-footer"></div>
       </div>
     );
   }

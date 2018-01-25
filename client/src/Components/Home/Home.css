@@ -1,15 +1,54 @@
+.Home {
+  display: grid;
+  grid-column-gap: 10px;
+  grid-row-gap: 15px;
+  grid-template-areas:
+    "header header header header"
+    "main main main sidebar"
+    "footer footer footer footer";
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 88px 1fr 76px;
+}
+
 .Home-header {
+  align-items: center;
   background-color: #222;
   color: white;
-  height: 76px;
-  padding: 20px;
+  display: inline-grid;
+  grid-area: header;
+  grid-template-areas:
+    "title button";
+  grid-template-columns: 1fr 1fr;
+  padding: 0 14px 0 14px;
 }
 
 .Home-title {
-  float: left;
-  font-size: 1.5em;
+  font-size: 1.6em;
+  font-weight: bold;
+  grid-area: title;
+  grid-column-start: 1;
+  text-align: left;
+}
+
+.Home-accountButton {
+  grid-area: button;
+  text-align: right;
 }
 
 .Home-intro {
   font-size: large;
+}
+
+.Home-posts {
+  grid-area: main;
+}
+
+.Home-sidebar {
+  background-color: green;
+  grid-area: sidebar;
+}
+
+.Home-footer {
+  background-color: violet;
+  grid-area: footer;
 }
