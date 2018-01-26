@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import {Card, CardActions, CardHeader} from 'material-ui/Card';
 import InfoModal from '../../../Common/InfoModal/InfoModal';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import ReactQuill from 'react-quill';
+import '../../../../Styles/Quill.css';
 import './AddPost.css';
 
 const styles = {
   postHeader: {
-    width: '96%'
+    width: '97%'
   }
 };
 
@@ -24,27 +26,30 @@ class AddPost extends Component {
       redirectLocation: null
     };
 
-    this.handleTextFieldChange = this.handleTextFieldChange.bind(this);
+    this.handleHeaderChange = this.handleHeaderChange.bind(this);
+    this.handleBodyChange = this.handleBodyChange.bind(this);
     this.handleSubmitPostButtonClick = this.handleSubmitPostButtonClick.bind(this);
+    this.handleErrors = this.handleErrors.bind(this);
   }
 
-  handleTextFieldChange ({target}) {
-    // MT: Reset the error message once the modal has been closed.
-    if (this.state.openModal && this.state.status && this.state.message) {
-      this.setState({
-        openModal: false,
-        status: null,
-        message: null
-      });
-    }
+  handleHeaderChange ({target}) {
+    this.handleErrors();
+
     this.setState({
       [target.id]: target.value
     });
   }
 
+  handleBodyChange (body) {
+    this.handleErrors();
+
+    this.setState({ postBodyText: body });
+  }
+
   handleSubmitPostButtonClick (event) {
     // This prevents ghost click.
     event.preventDefault();
+    this.handleErrors();
 
     fetch('/api/admin/addPost', {
       method: 'POST',
@@ -86,6 +91,17 @@ class AddPost extends Component {
     });
   }
 
+  handleErrors () {
+    // MT: Reset the error message once the modal has been closed.
+    if (this.state.openModal && this.state.status && this.state.message) {
+      this.setState({
+        openModal: false,
+        status: null,
+        message: null
+      });
+    }
+  }
+
   componentDidMount () {
   }
 
@@ -110,23 +126,17 @@ class AddPost extends Component {
           <TextField
             hintText="The header of your post..."
             id="postHeaderText"
-            style={styles.postHeader}
-            onChange={this.handleTextFieldChange}
+            style={ styles.postHeader }
+            onChange={ this.handleHeaderChange }
           /><br />
-          <textarea
+          <ReactQuill
             id="postBodyText"
             className="AddPost-post-body"
             placeholder="Your post..."
-            onChange={this.handleTextFieldChange}>
-          </textarea>
-          <CardText>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-            Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-            Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-          </CardText>
+            onChange={ this.handleBodyChange }>
+          </ReactQuill>
           <CardActions>
-            <RaisedButton primary={true} label="Submit Post" onClick={this.handleSubmitPostButtonClick} />
+            <RaisedButton primary={ true } label="Submit Post" onClick={ this.handleSubmitPostButtonClick } />
           </CardActions>
         </Card>
       </div>
