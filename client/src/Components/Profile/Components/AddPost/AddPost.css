@@ -1,4 +1,9 @@
 .AddPost-post-body {
+  margin: 10px;
   min-height: 300px;
-  width: 96%;
+  width: 98%;
+}
+
+.ql-container {
+  min-height: 300px;
 }

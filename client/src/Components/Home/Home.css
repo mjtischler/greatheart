@@ -22,6 +22,11 @@
   padding: 0 14px 0 14px;
 }
 
+.Home-header a {
+  color: white;
+  text-decoration: none;
+}
+
 .Home-title {
   font-size: 1.6em;
   font-weight: bold;

@@ -51,7 +51,9 @@ class Home extends Component {
     return (
       <div className="Home">
         <header className="Home-header">
-          <div className="Home-title">Greatheart</div>
+          <div className="Home-title">
+            <a href="/">Greatheart</a>
+          </div>
           <div className="Home-accountButton">
             { this.state.isLoggedIn ? <LogoutButton></LogoutButton> : <LoginButton></LoginButton> }
           </div>

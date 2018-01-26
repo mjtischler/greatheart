@@ -58,6 +58,11 @@ class Posts extends Component {
     });
   }
 
+  // MT: A function to render HTML embedded in returned JSON.
+  createMarkup (markup) {
+    return {__html: markup};
+  }
+
   render () {
     if (!this.state.loaded) {
       return <CircularProgress
@@ -77,7 +82,7 @@ class Posts extends Component {
                   subtitle={ `${posts.postAuthorName} on ${getLocalDate(posts.postCreationDate)}` }
                 />
                 <CardText>
-                  { posts.postBodyText }
+                  <div dangerouslySetInnerHTML={ this.createMarkup(posts.postBodyText) }></div>
                 </CardText>
               </Card>
             )

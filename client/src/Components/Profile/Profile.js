@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CircularProgress from 'material-ui/CircularProgress';
 import LogoutButton from '../Common/LogoutButton/LogoutButton';
 import AddPost from './Components/AddPost/AddPost';
-import {Card, CardHeader} from 'material-ui/Card';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
 import './Profile.css';
 
 class Profile extends Component {
@@ -25,6 +25,7 @@ class Profile extends Component {
       method: 'GET',
       credentials: 'include'
     }).then(response => response.json()).then(response => {
+      console.log(response);
       if (response.status === 'OK') {
         const profileData = [];
         profileData.push(response.result);
@@ -54,7 +55,9 @@ class Profile extends Component {
       return (
         <div>
           <header className="Profile-header">
-            <h1 className="Profile-title">Greatheart</h1>
+            <div className="Profile-title">
+              <a href="/">Greatheart</a>
+            </div>
             <LogoutButton></LogoutButton>
           </header>
           <div className="Profile-container">
@@ -88,6 +91,9 @@ class Profile extends Component {
                 subtitle={profile.email}
               />
             )}
+            <CardText>
+
+            </CardText>
           </Card>
         </div>
       </div>
