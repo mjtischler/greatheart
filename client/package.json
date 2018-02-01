@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build & rm -rf ../server/Public/* & cp -r build/* ../server/Public",
+    "build": "react-scripts build & rm -rf ../server/Public/static/* & cp -r build/* ../server/Public",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
