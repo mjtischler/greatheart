@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from 'material-ui/CircularProgress';
-import {Card, CardHeader, CardTitle, CardText} from 'material-ui/Card';
+import {Card, CardHeader, CardTitle, CardMedia, CardText} from 'material-ui/Card';
 import { getLocalDate } from '../../Utils/SharedUtils';
 import './Posts.css';
 
@@ -81,6 +81,9 @@ class Posts extends Component {
                 <CardHeader
                   subtitle={ `${posts.postAuthorName} on ${getLocalDate(posts.postCreationDate)}` }
                 />
+                <CardMedia>
+                  <img src={`/posts/images/${posts.postImage}`} alt="" />
+                </CardMedia>
                 <CardText>
                   <div dangerouslySetInnerHTML={ this.createMarkup(posts.postBodyText) }></div>
                 </CardText>

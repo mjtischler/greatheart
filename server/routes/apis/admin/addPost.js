@@ -13,6 +13,7 @@ router.post('/', (req, res) => {
     postBodyText: req.body.postBodyText,
     postAuthorUserId: req.session.userId,
     postAuthorName: req.session.userName,
+    postImage: req.session.postImage,
     postCreationDate: new Date().toISOString()
   };
 
@@ -33,6 +34,11 @@ router.post('/', (req, res) => {
         if (resolve.result[0].isAdmin) {
           db.writeToCollection('Posts', addedPost)
             .then(() => {
+              // MT: Reset the postImage once we've written it to the collection.
+              if (req.session.postImage) {
+                req.session.postImage = null;
+              }
+
               res.json({
                 status: 'OK',
                 redirected: 'true'
@@ -80,10 +86,6 @@ router.post('/', (req, res) => {
       message: 'You must provide both a header and a body for your post.'
     });
   }
-
-  // res.json({
-  //   addedPost: 'OK'
-  // });
 });
 
 module.exports = router;
