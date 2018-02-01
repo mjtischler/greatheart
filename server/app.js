@@ -13,6 +13,7 @@ const login = require('./routes/apis/login');
 const logout = require('./routes/apis/logout');
 const signup = require('./routes/apis/signup');
 const addPost = require('./routes/apis/admin/addPost');
+const addImage = require('./routes/apis/admin/addImage');
 const index = require('./routes/index');
 const uuidv1 = require('uuid/v1');
 // MT: The path to our secret key for cookie session storage.
@@ -65,6 +66,7 @@ app.use('/api/login', login);
 app.use('/api/logout', logout);
 app.use('/api/signup', signup);
 app.use('/api/admin/addPost', addPost);
+app.use('/api/admin/addImage', addImage);
 // MT: react-router will handle routing on the front-end, so we'll deliver the app files on all non-API requests. The ordering of the server-side routes matter, hence why the APIs are defined above the wildcard ('*') routing.
 app.use('*', index);
 

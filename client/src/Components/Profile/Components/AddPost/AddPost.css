@@ -7,3 +7,11 @@
 .ql-container {
   min-height: 300px;
 }
+
+.AddPost-upload-input {
+  display: none;
+}
+
+.AddPost-add-image-button {
+  margin-right: 10px;
+}
