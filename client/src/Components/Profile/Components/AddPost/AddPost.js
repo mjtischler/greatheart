@@ -72,17 +72,17 @@ class AddPost extends Component {
         message: 'Images must be less than 2.5MB in size.'
       });
     } else {
+      reader.readAsDataURL(upload);
+
       reader.onloadend = () => {
         this.setState({
           image: upload,
           imagePreviewUrl: reader.result,
           imageAdded: true
         });
+
+        this.uploadImage();
       };
-
-      reader.readAsDataURL(upload);
-
-      this.uploadImage();
     }
   }
 
@@ -132,10 +132,6 @@ class AddPost extends Component {
             message: 'Your post was added successfully.',
             redirectLocation: '/profile'
           });
-
-          if (this.state.imageAdded) {
-            this.uploadImage();
-          }
         } else if (response.status === 'ERROR') {
           this.setState({
             openModal: true,

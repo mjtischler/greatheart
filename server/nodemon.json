@@ -16,6 +16,10 @@
     "views",
     "session"
   ],
+  "ignore": [
+    "public/posts/images",
+    "README.md"
+  ],
   "env": {
     "NODE_ENV": "development"
   },
