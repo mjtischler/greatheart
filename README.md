@@ -23,7 +23,8 @@ A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in
 - [Helpful Resources](#helpful-resources)
 
 ### To Do
-- Fold addImage logic into addPost logic.
+- ~~Fix async bug when uploading images in production~~
+- Move console logging to DB
 
 ### Me
 
