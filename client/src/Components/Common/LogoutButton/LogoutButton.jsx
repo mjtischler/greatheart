@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import InfoModal from '../InfoModal/InfoModal';
+import InfoModal from '../InfoModal/InfoModal.jsx';
 import './LogoutButton.css';
 
 const styles = {
@@ -56,16 +56,16 @@ class LogoutButton extends Component {
   render () {
     return (
       <div>
-        {this.state.openModal ?
+        { this.state.openModal ?
           <InfoModal
-            open={this.state.openModal}
-            status={this.state.status}
-            message={this.state.message}
-            redirectLocation={this.state.redirectLocation}
+            open={ this.state.openModal }
+            status={ this.state.status }
+            message={ this.state.message }
+            redirectLocation={ this.state.redirectLocation }
           /> : false
         }
         <div className="LogoutButton-container">
-          <RaisedButton primary={true} style={styles.button} onClick={this.handleMasterButtonClick}>
+          <RaisedButton primary={ true } style={ styles.button } onClick={ this.handleMasterButtonClick }>
             Log out
           </RaisedButton>
         </div>

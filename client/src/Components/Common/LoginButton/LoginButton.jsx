@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import InfoModal from '../InfoModal/InfoModal';
+import InfoModal from '../InfoModal/InfoModal.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';

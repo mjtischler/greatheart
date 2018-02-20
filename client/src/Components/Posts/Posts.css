@@ -1,0 +1,30 @@
+.postContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.postStyle {
+  margin: 20px;
+  text-align: left;
+  width: 30%;
+}
+
+.postHeader {
+  min-height: 72px;
+  word-break: normal;
+}
+
+.postImage {
+  margin: 10px;
+  padding-bottom: 10px;
+}
+
+.postText {
+  display: none;
+}
+
+@media (max-width: 959px) {
+  .postStyle {
+    width: 100%;
+  }
+}

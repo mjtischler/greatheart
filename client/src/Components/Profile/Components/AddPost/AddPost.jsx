@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Card, CardActions, CardHeader} from 'material-ui/Card';
-import InfoModal from '../../../Common/InfoModal/InfoModal';
+import InfoModal from '../../../Common/InfoModal/InfoModal.jsx';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import ReactQuill from 'react-quill';
@@ -177,12 +177,12 @@ class AddPost extends Component {
         {/*
           MT: Render the modal when the AddPost's openModal state changes, and pass the necessary properties into the dialog.
         */}
-        {this.state.openModal ?
+        { this.state.openModal ?
           <InfoModal
-            open={this.state.openModal}
-            status={this.state.status}
-            message={this.state.message}
-            redirectLocation={this.state.redirectLocation}
+            open={ this.state.openModal }
+            status={ this.state.status }
+            message={ this.state.message }
+            redirectLocation={ this.state.redirectLocation }
           /> : false
         }
         <Card>
@@ -192,6 +192,7 @@ class AddPost extends Component {
           <TextField
             hintText="The header of your post..."
             id="postHeaderText"
+            maxLength="58"
             style={ styles.postHeader }
             onChange={ this.handleHeaderChange }
           /><br />
