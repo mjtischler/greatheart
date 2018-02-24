@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from 'material-ui/CircularProgress';
-import LogoutButton from '../Common/LogoutButton/LogoutButton';
-import AddPost from './Components/AddPost/AddPost';
+import LogoutButton from '../Common/LogoutButton/LogoutButton.jsx';
+import AddPost from './Components/AddPost/AddPost.jsx';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import './Profile.css';
 
@@ -25,7 +25,6 @@ class Profile extends Component {
       method: 'GET',
       credentials: 'include'
     }).then(response => response.json()).then(response => {
-      console.log(response);
       if (response.status === 'OK') {
         const profileData = [];
         profileData.push(response.result);
@@ -84,7 +83,7 @@ class Profile extends Component {
         </header>
         <div className="Profile-container">
           <Card>
-            {this.state.profileData.map(profile =>
+            { this.state.profileData.map(profile =>
               <CardHeader
                 key={profile.userId}
                 title={profile.userName}

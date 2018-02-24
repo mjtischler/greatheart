@@ -4,7 +4,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 // MT: A resuable modal for sitewide application.
-class InfoModal extends Component {
+class PostModal extends Component {
   constructor (props) {
     super(props);
 
@@ -12,7 +12,7 @@ class InfoModal extends Component {
       open: props.open,
       status: props.status,
       message: props.message,
-      redirectLocation: props.redirectLocation
+      close: props.close
     };
 
     this.handleClose = this.handleClose.bind(this);
@@ -23,48 +23,53 @@ class InfoModal extends Component {
       open: this.props.open,
       status: this.props.status,
       message: this.props.message,
-      redirectLocation: this.props.redirectLocation
+      close: this.props.close
     });
   }
 
-  handleClose () {
-    this.setState({open: false});
+  // MT: A function to render HTML embedded in returned JSON.
+  createMarkup (markup) {
+    return { __html: markup };
+  }
 
-    if (this.state.redirectLocation) {
-      window.location = this.state.redirectLocation;
-    }
+
+  handleClose () {
+    this.state.close();
   }
 
   render () {
     const actions = [
       <FlatButton
         key={0}
-        label="GOT IT"
-        primary={true}
-        onClick={this.handleClose}
+        label="CLOSE"
+        primary={ true }
+        onClick={ this.handleClose }
       />
     ];
 
     return (
       <div>
         <Dialog
-          title={this.state.status}
-          actions={actions}
-          modal={true}
-          open={this.state.open}
+          title={ this.state.status }
+          titleClassName="postModal-title"
+          actions={ actions }
+          modal={ false }
+          open={ this.state.open }
+          onRequestClose={ () => this.handleClose() }
+          autoScrollBodyContent={ true }
         >
-          {this.state.message}
+        <div dangerouslySetInnerHTML={ this.createMarkup(this.state.message) }></div>
         </Dialog>
       </div>
     );
   }
 }
 
-InfoModal.propTypes = {
+PostModal.propTypes = {
   open: PropTypes.bool.isRequired,
   status: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
-  redirectLocation: PropTypes.string
+  message: PropTypes.any.isRequired,
+  close: PropTypes.func.isRequired
 };
 
-export default InfoModal;
+export default PostModal;

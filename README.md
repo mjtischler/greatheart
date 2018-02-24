@@ -25,6 +25,8 @@ A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in
 ### To Do
 - ~~Fix async bug when uploading images in production~~
 - Move console logging to DB
+- Clean up homepage styling
+- Handle modal errors in modal utility
 
 ### Me
 

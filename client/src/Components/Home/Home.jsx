@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from 'material-ui/CircularProgress';
-import LogoutButton from '../Common/LogoutButton/LogoutButton';
-import LoginButton from '../Common/LoginButton/LoginButton';
-import Posts from '../Posts/Posts';
+import LogoutButton from '../Common/LogoutButton/LogoutButton.jsx';
+import LoginButton from '../Common/LoginButton/LoginButton.jsx';
+import Posts from '../Posts/Posts.jsx';
 import './Home.css';
 
 class Home extends Component {
