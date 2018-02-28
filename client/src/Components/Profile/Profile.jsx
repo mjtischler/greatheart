@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from 'material-ui/CircularProgress';
-import LogoutButton from '../Common/LogoutButton/LogoutButton.jsx';
+import TitleBar from '../Common/TitleBar/TitleBar.jsx';
 import AddPost from './Components/AddPost/AddPost.jsx';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
+import '../Home/Home.css';
 import './Profile.css';
 
 class Profile extends Component {
@@ -52,21 +53,22 @@ class Profile extends Component {
 
     if (this.state.profileData[0].isAdmin) {
       return (
-        <div>
-          <header className="Profile-header">
-            <div className="Profile-title">
-              <a href="/">Greatheart</a>
-            </div>
-            <LogoutButton></LogoutButton>
-          </header>
-          <div className="Profile-container">
+        <div className="Profile-container">
+          <TitleBar
+            className="Profile-header"
+            loaded={ this.state.loaded }
+            isLoggedIn={ true }
+          />
+          <div className="Profile-addPost">
             <AddPost></AddPost>
+          </div>
+          <div className="Profile-userInfo">
             <Card>
               {this.state.profileData.map(profile =>
                 <CardHeader
-                  key={profile.userId}
-                  title={profile.userName}
-                  subtitle={profile.email}
+                  key={ profile.userId }
+                  title={ profile.userName }
+                  subtitle={ profile.email }
                 />
               )}
             </Card>
@@ -76,18 +78,19 @@ class Profile extends Component {
     }
 
     return (
-      <div>
-        <header className="Profile-header">
-          <h1 className="Profile-title">Greatheart</h1>
-          <LogoutButton></LogoutButton>
-        </header>
-        <div className="Profile-container">
+      <div className="Profile-container">
+        <TitleBar
+          className="Profile-header"
+          loaded={ this.state.loaded }
+          isLoggedIn={ this.state.isLoggedIn }
+        />
+        <div className="Profile-userInfo">
           <Card>
             { this.state.profileData.map(profile =>
               <CardHeader
-                key={profile.userId}
-                title={profile.userName}
-                subtitle={profile.email}
+                key={ profile.userId }
+                title={ profile.userName }
+                subtitle={ profile.email }
               />
             )}
             <CardText>

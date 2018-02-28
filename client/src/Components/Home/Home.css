@@ -4,35 +4,14 @@
   grid-row-gap: 15px;
   grid-template-areas:
     "header header header header"
-    "main main main sidebar"
+    "sidebar main main main"
     "footer footer footer footer";
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 88px 1fr 76px;
+  /* grid-template-rows: 88px 1fr 76px; */
 }
 
 .Home-header {
-  align-items: center;
-  background-color: #222;
-  color: white;
-  display: inline-grid;
   grid-area: header;
-  grid-template-areas:
-    "title button";
-  grid-template-columns: 1fr 1fr;
-  padding: 0 14px 0 14px;
-}
-
-.Home-header a {
-  color: white;
-  text-decoration: none;
-}
-
-.Home-title {
-  font-size: 1.6em;
-  font-weight: bold;
-  grid-area: title;
-  grid-column-start: 1;
-  text-align: left;
 }
 
 .Home-accountButton {

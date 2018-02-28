@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from 'material-ui/CircularProgress';
-import LogoutButton from '../Common/LogoutButton/LogoutButton.jsx';
-import LoginButton from '../Common/LoginButton/LoginButton.jsx';
+import TitleBar from '../Common/TitleBar/TitleBar.jsx';
 import Posts from '../Posts/Posts.jsx';
 import './Home.css';
 
@@ -50,20 +49,17 @@ class Home extends Component {
 
     return (
       <div className="Home">
-        <header className="Home-header">
-          <div className="Home-title">
-            <a href="/">Greatheart</a>
-          </div>
-          <div className="Home-accountButton">
-            { this.state.isLoggedIn ? <LogoutButton></LogoutButton> : <LoginButton></LoginButton> }
-          </div>
-        </header>
+        <TitleBar
+          className="Home-header"
+          loaded={ this.state.loaded }
+          isLoggedIn={ this.state.isLoggedIn }
+        />
+        <div className="Home-sidebar"></div>
         <div className="Home-posts">
           <Posts
             sharedStyles={ this.props.sharedStyles }
           />
         </div>
-        <div className="Home-sidebar"></div>
         <div className="Home-footer"></div>
       </div>
     );

@@ -1,0 +1,43 @@
+.TitleBar {
+  align-items: center;
+  color: white;
+  display: inline-grid;
+  grid-area: header;
+  grid-template-areas:
+    "title title title title";
+  grid-template-columns: 1fr;
+}
+
+.TitleBar-header a {
+  color: white;
+  text-decoration: none;
+}
+
+.TitleBar-appBarIcon {
+  max-width: 44px;
+}
+
+.TitleBar-title {
+  font-size: 36px;
+  grid-area: title;
+  text-align: left;
+}
+
+.TitleBar-titleEnd {
+  color: rgb(224, 176, 255);
+}
+
+.TitleBar-loginButton {
+  margin-top: 6px;
+}
+
+/* MT: Media queries here */
+@media (max-width: 959px) {
+  .TitleBar-appBarIcon {
+    max-width: 40px;
+  }
+
+  .TitleBar-title {
+    font-size: 28px;
+  }
+}
