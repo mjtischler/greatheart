@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardMedia, CardText, CardActions } from 'm
 import RaisedButton from 'material-ui/RaisedButton';
 import { getLocalDate } from '../../Utils/SharedUtils';
 import PostModal from './PostModal.jsx';
+import Sidebar from './Sidebar/Sidebar.jsx';
 import './Posts.css';
 
 class Posts extends Component {
@@ -92,22 +93,24 @@ class Posts extends Component {
     }
 
     return (
-      <div>
+      <div className="posts-container">
         {/*
           MT: Render the modal when the Posts's openModal state changes, and pass the necessary properties into the dialog.
         */}
         { this.state.openModal ?
-          <PostModal
-            open={ this.state.openModal }
-            status={ this.state.status }
-            message={ this.state.message }
-            close={ this.closePost }
-          /> : false
+          <div className="posts-modalContainer">
+            <PostModal
+              open={ this.state.openModal }
+              status={ this.state.status }
+              message={ this.state.message }
+              close={ this.closePost }
+            />
+          </div> : false
         }
-        <div className="postContainer">
+        <div className="posts-listItemContainer">
           { this.state.loaded ?
               this.state.posts.map(post =>
-                <Card key={ post._id } className="postStyle">
+                <Card key={ post._id }>
                   <CardTitle
                     className="postHeader"
                     title={ post.postHeaderText }
@@ -129,6 +132,7 @@ class Posts extends Component {
             : <div>There are no posts.</div>
           }
         </div>
+        <Sidebar className="posts-sidebar" />
       </div>
     );
   }

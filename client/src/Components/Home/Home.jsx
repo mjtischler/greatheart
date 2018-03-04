@@ -54,7 +54,6 @@ class Home extends Component {
           loaded={ this.state.loaded }
           isLoggedIn={ this.state.isLoggedIn }
         />
-        <div className="Home-sidebar"></div>
         <div className="Home-posts">
           <Posts
             sharedStyles={ this.props.sharedStyles }

@@ -1,6 +1,25 @@
-.postContainer {
-  display: flex;
-  flex-wrap: wrap;
+.posts-container {
+  display: grid;
+  grid-column-gap: 10px;
+  grid-row-gap: 15px;
+  grid-template-areas:
+    "postslistitemcontainer postslistitemcontainer postslistitemcontainer sidebar";
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  /* grid-template-rows: 88px 1fr 76px; */
+}
+
+.posts-sidebar {
+  grid-area: sidebar;
+}
+
+.posts-listItemContainer {
+  display: grid;
+  grid-area: postslistitemcontainer;
+  grid-column-gap: 10px;
+  grid-row-gap: 15px;
+  grid-template-areas:
+    "postlistitem";
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .postStyle {
@@ -23,7 +42,24 @@
   display: none;
 }
 
+/* MT: This is a fix to prevent the dialog from pushing the sidebar out of the viewport. */
+.posts-modalContainer {
+  display: none;
+}
+
 @media (max-width: 959px) {
+  .posts-container {
+    grid-template-areas:
+      "postslistitemcontainer"
+      "sidebar";
+    grid-template-columns: 1fr;
+  }
+  .posts-listItemContainer {
+    grid-template-areas:
+      "postlistitem";
+    grid-template-columns: 1fr;
+  }
+
   .postStyle {
     width: 100%;
   }
