@@ -3,7 +3,16 @@ import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-// MT: A resuable modal for sitewide application.
+const PostModalStyle = {
+  dialog: {
+    width: '92%'
+  },
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, .70)',
+    display: 'inline'
+  }
+};
+
 class PostModal extends Component {
   constructor (props) {
     super(props);
@@ -50,15 +59,16 @@ class PostModal extends Component {
     return (
       <div>
         <Dialog
+          contentStyle={ PostModalStyle.dialog }
+          overlayStyle= { PostModalStyle.overlay }
           title={ this.state.status }
-          titleClassName="postModal-title"
           actions={ actions }
           modal={ false }
           open={ this.state.open }
           onRequestClose={ () => this.handleClose() }
           autoScrollBodyContent={ true }
         >
-        <div dangerouslySetInnerHTML={ this.createMarkup(this.state.message) }></div>
+          <div dangerouslySetInnerHTML={ this.createMarkup(this.state.message) }></div>
         </Dialog>
       </div>
     );
