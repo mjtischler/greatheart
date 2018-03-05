@@ -7,15 +7,21 @@ import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
 import './LoginButton.css';
 
-const styles = {
+const LoginButtonStyles = {
+  popover: {
+    backgroundColor: 'rgb(138, 138, 138)'
+  },
   button: {
     color: 'white',
-    width: 140
+    width: 100
   },
   divider: {
     backgroundColor: 'rgb(176, 176, 176)',
     marginLeft: 20,
     marginRight: 20
+  },
+  hintStyle: {
+    color: 'white'
   }
 };
 
@@ -194,88 +200,109 @@ class LoginButton extends Component {
   render () {
     return (
       <div>
-        {this.state.openModal ?
+        { this.state.openModal ?
           <InfoModal
-            open={this.state.openModal}
-            status={this.state.status}
-            message={this.state.message}
-            redirectLocation={this.state.redirectLocation}
+            open={ this.state.openModal }
+            status={ this.state.status }
+            message={ this.state.message }
+            redirectLocation={ this.state.redirectLocation }
           /> : false
         }
-        <RaisedButton primary={true} style={styles.button} onClick={this.handleMasterButtonClick}>
-          Login or Signup
+        <RaisedButton
+          primary={ true }
+          className="LoginButton-button"
+          style={ LoginButtonStyles.button }
+          onClick={ this.handleMasterButtonClick }>
+          <i className="fas fa-sign-in-alt"></i>
+          &nbsp; or &nbsp;
+          <i className="fas fa-user-plus"></i>
         </RaisedButton>
 
         <Popover
           className="Login-menu"
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'right', vertical: 'top'}}
-          onRequestClose={this.handleRequestClose}
+          style={ LoginButtonStyles.popover }
+          open={ this.state.open }
+          anchorEl={ this.state.anchorEl }
+          anchorOrigin={ {horizontal: 'right', vertical: 'bottom'} }
+          targetOrigin={ {horizontal: 'right', vertical: 'top'} }
+          onRequestClose={ this.handleRequestClose }
         >
           <Menu>
             <div className="LoginButton-login-pane">
               <TextField
                 id="loginEmail"
                 className="LoginButton-textfield"
+                hintStyle={ LoginButtonStyles.hintStyle }
                 hintText="Email"
-                fullWidth={true}
+                fullWidth={ true }
                 type="text"
-                onChange={this.handleTextFieldChange}
-                errorText={this.state.errors.loginEmail}
+                onChange={ this.handleTextFieldChange }
+                errorText={ this.state.errors.loginEmail }
               /><br />
               <TextField
                 id="loginPassword"
                 className="LoginButton-textfield"
+                hintStyle={ LoginButtonStyles.hintStyle }
                 hintText="Password"
-                fullWidth={true}
+                fullWidth={ true }
                 type="password"
-                onChange={this.handleTextFieldChange}
-                errorText={this.state.errors.loginPassword}
+                onChange={ this.handleTextFieldChange }
+                errorText={ this.state.errors.loginPassword }
               /><br />
-              <RaisedButton primary={true} className="LoginButton-menu-button" onClick={this.handleLoginButtonClick}>
+              <RaisedButton
+                primary={ true }
+                className="LoginButton-menu-button"
+                onClick={ this.handleLoginButtonClick }
+              >
                 Login
               </RaisedButton>
             </div>
-            <Divider style={styles.divider}/>
+            <Divider style={ LoginButtonStyles.divider }/>
             <div className="LoginButton-signup-pane">
               <TextField
                 id="signupEmail"
                 className="LoginButton-textfield"
+                hintStyle={ LoginButtonStyles.hintStyle }
                 hintText="Email"
-                fullWidth={true}
+                fullWidth={ true }
                 type="text"
-                onChange={this.handleTextFieldChange}
-                errorText={this.state.errors.signupEmail}
+                onChange={ this.handleTextFieldChange }
+                errorText={ this.state.errors.signupEmail }
               /><br />
               <TextField
                 id="signupUsername"
                 className="LoginButton-textfield"
+                hintStyle={ LoginButtonStyles.hintStyle }
                 hintText="Username"
-                fullWidth={true}
+                fullWidth={ true }
                 type="text"
-                onChange={this.handleTextFieldChange}
-                errorText={this.state.errors.signupUsername}
+                onChange={ this.handleTextFieldChange }
+                errorText={ this.state.errors.signupUsername }
               /><br />
               <TextField
                 id="signupPassword"
                 className="LoginButton-textfield"
+                hintStyle={ LoginButtonStyles.hintStyle }
                 hintText="Password"
-                fullWidth={true}
+                fullWidth={ true }
                 type="password"
-                onChange={this.handleTextFieldChange}
+                onChange={ this.handleTextFieldChange }
               /><br />
               <TextField
                 id="signupPasswordReentry"
                 className="LoginButton-textfield"
+                hintStyle={ LoginButtonStyles.hintStyle }
                 hintText="Repeat Password"
-                fullWidth={true}
+                fullWidth={ true }
                 type="password"
-                onChange={this.handleTextFieldChange}
-                errorText={this.state.errors.signupGeneric}
+                onChange={ this.handleTextFieldChange }
+                errorText={ this.state.errors.signupGeneric }
               /><br />
-              <RaisedButton primary={true} className="LoginButton-menu-button" onClick={this.handleSignupButtonClick}>
+              <RaisedButton
+                primary={ true }
+                className="LoginButton-menu-button"
+                onClick={ this.handleSignupButtonClick }
+              >
                 Sign Up
               </RaisedButton>
             </div>

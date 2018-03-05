@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CircularProgress from 'material-ui/CircularProgress';
 import TitleBar from '../Common/TitleBar/TitleBar.jsx';
 import AddPost from './Components/AddPost/AddPost.jsx';
+import Footer from '../Common/Footer/Footer.jsx';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import '../Home/Home.css';
 import './Profile.css';
@@ -53,32 +54,38 @@ class Profile extends Component {
 
     if (this.state.profileData[0].isAdmin) {
       return (
-        <div className="Profile-container">
-          <TitleBar
-            className="Profile-header"
-            loaded={ this.state.loaded }
-            isLoggedIn={ true }
-          />
-          <div className="Profile-addPost">
-            <AddPost></AddPost>
+        <div className="Profile">
+          <div className="Profile-header">
+            <TitleBar
+              loaded={ this.state.loaded }
+              isLoggedIn={ true }
+            />
           </div>
-          <div className="Profile-userInfo">
-            <Card>
-              {this.state.profileData.map(profile =>
-                <CardHeader
-                  key={ profile.userId }
-                  title={ profile.userName }
-                  subtitle={ profile.email }
-                />
-              )}
-            </Card>
+          <div className="Profile-container">
+            <div className="Profile-addPost">
+              <AddPost></AddPost>
+            </div>
+            <div className="Profile-userInfo">
+              <Card>
+                {this.state.profileData.map(profile =>
+                  <CardHeader
+                    key={ profile.userId }
+                    title={ profile.userName }
+                    subtitle={ profile.email }
+                  />
+                )}
+              </Card>
+            </div>
+          </div>
+          <div className="Profile-footer">
+            <Footer />
           </div>
         </div>
       );
     }
 
     return (
-      <div className="Profile-container">
+      <div className="Profile">
         <TitleBar
           className="Profile-header"
           loaded={ this.state.loaded }
@@ -97,6 +104,9 @@ class Profile extends Component {
 
             </CardText>
           </Card>
+        </div>
+        <div className="Profile-footer">
+          <Footer />
         </div>
       </div>
     );

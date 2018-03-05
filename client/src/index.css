@@ -1,4 +1,18 @@
 body {
+  background-color: rgb(50, 50, 50);
+  font-family: 'Open Sans', sans-serif;
   margin: 0;
   padding: 0;
+}
+
+html,
+body,
+.root {
+  height: 100%;
+}
+
+a {
+  color: rgb(224, 176, 255);
+  font-family: inherit;
+  text-decoration: none;
 }
