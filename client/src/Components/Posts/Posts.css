@@ -18,8 +18,39 @@
   grid-column-gap: 10px;
   grid-row-gap: 15px;
   grid-template-areas:
-    "postlistitem";
+    "sectionhead sectionhead sectionhead"
+    "postlistitem postlistitem postlistitem";
   grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 40px auto;
+}
+
+.posts-sectionHead {
+  border-top: 1px solid rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(255, 255, 255);
+  border-top: 1px solid rgba(255, 255, 255, 0.87);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.87);
+  grid-area: sectionhead;
+  height: 26px;
+  padding: 2px 0 2px 0;
+}
+
+.posts-sectionHead-titleText,
+.posts-sectionHead-titleSeeAllLink {
+  color: rgb(255, 255, 255);
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.posts-sectionHead-titleText {
+  float: left;
+}
+
+.posts-sectionHead-titleSeeAllLink {
+  float: right;
+}
+
+.posts-sectionHead-titleSeeAllLink:hover {
+  color: rgb(224, 176, 255);
+  cursor: pointer;
 }
 
 .postStyle {
@@ -56,6 +87,7 @@
   }
   .posts-listItemContainer {
     grid-template-areas:
+      "sectionhead"
       "postlistitem";
     grid-template-columns: 1fr;
   }
