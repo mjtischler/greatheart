@@ -29,6 +29,5 @@
 }
 
 .Home-footer {
-  background-color: violet;
   grid-area: footer;
 }

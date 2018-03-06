@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CircularProgress from 'material-ui/CircularProgress';
 import TitleBar from '../Common/TitleBar/TitleBar.jsx';
 import Posts from '../Posts/Posts.jsx';
+import Footer from '../Common/Footer/Footer.jsx';
 import './Home.css';
 
 class Home extends Component {
@@ -49,17 +50,20 @@ class Home extends Component {
 
     return (
       <div className="Home">
-        <TitleBar
-          className="Home-header"
-          loaded={ this.state.loaded }
-          isLoggedIn={ this.state.isLoggedIn }
-        />
+        <div className="Home-header">
+          <TitleBar
+            loaded={ this.state.loaded }
+            isLoggedIn={ this.state.isLoggedIn }
+          />
+        </div>
         <div className="Home-posts">
           <Posts
             sharedStyles={ this.props.sharedStyles }
           />
         </div>
-        <div className="Home-footer"></div>
+        <div className="Home-footer">
+          <Footer />
+        </div>
       </div>
     );
   }

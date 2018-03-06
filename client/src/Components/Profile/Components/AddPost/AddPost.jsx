@@ -7,9 +7,12 @@ import ReactQuill from 'react-quill';
 import '../../../../Styles/Quill.css';
 import './AddPost.css';
 
-const styles = {
-  postHeader: {
+const AddPostStyles = {
+  postHeaderText: {
     width: '97%'
+  },
+  cardHeaderText: {
+    padding: 0
   }
 };
 
@@ -187,23 +190,25 @@ class AddPost extends Component {
         }
         <Card>
           <CardHeader
+            textStyle={ AddPostStyles.cardHeaderText }
             title="Add Post"
           />
           <TextField
             hintText="The header of your post..."
             id="postHeaderText"
             maxLength="58"
-            style={ styles.postHeader }
+            style={ AddPostStyles.postHeaderText }
             onChange={ this.handleHeaderChange }
           /><br />
           <RaisedButton
+            primary={ true }
             className="AddPost-add-image-button"
             containerElement='label'
             label='Add Image'
             onClick={ this.handleErrors }>
               <input type="file" className="AddPost-upload-input" onChange={ this.handleAddedImage } />
           </RaisedButton>
-          <span>{ this.state.image ? this.state.image.name : 'No image selected' }</span>
+          <span className="AddPost-image-text">{ this.state.image ? this.state.image.name : 'No image selected' }</span>
           <br />
           <ReactQuill
             id="postBodyText"

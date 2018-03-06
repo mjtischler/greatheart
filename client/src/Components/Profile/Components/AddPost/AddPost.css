@@ -1,17 +1,51 @@
 .AddPost-post-body {
+  color: rgb(0, 0, 0);
+  background-color: rgb(221,221,221);
   margin: 10px;
   min-height: 300px;
   width: 98%;
-}
-
-.ql-container {
-  min-height: 300px;
 }
 
 .AddPost-upload-input {
   display: none;
 }
 
+.AddPost-image-text {
+  color: rgb(195,195,195);
+}
+
 .AddPost-add-image-button {
   margin-right: 10px;
+}
+
+/* MT: Quill text editor customizations */
+.ql-container {
+  min-height: 300px;
+}
+
+.ql-toolbar.ql-snow {
+  font-family: 'Open Sans', sans-serif;
+  padding: 10px 0 10px 0;
+}
+
+.ql-snow.ql-picker-label {
+  margin: 0;
+  padding: 0;
+}
+
+/* MT: Media queries here */
+@media (max-width: 959px) {
+  .AddPost-post-body {
+    color: rgb(0, 0, 0);
+    background-color: rgb(221,221,221);
+    margin: 10px;
+    min-height: 300px;
+    width: 94%;
+  }
+
+  /* MT: Quill text editor customizations */
+  .ql-toolbar.ql-snow .ql-formats {
+    margin-right: 0;
+    padding: 2px;
+  }
 }

@@ -66,7 +66,7 @@ class LogoutButton extends Component {
         }
         <div className="LogoutButton-container">
           <RaisedButton primary={ true } style={ styles.button } onClick={ this.handleMasterButtonClick }>
-            Log out
+            <i className="fas fa-sign-out-alt"></i>
           </RaisedButton>
         </div>
       </div>

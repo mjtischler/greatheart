@@ -1,18 +1,27 @@
-.Profile-container {
+.Profile {
   display: grid;
   grid-column-gap: 10px;
   grid-row-gap: 15px;
   grid-template-areas:
     "header header header header"
-    "addpost addpost addpost userinfo"
+    "profilecontainer profilecontainer profilecontainer profilecontainer"
     "footer footer footer footer";
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  /* grid-template-rows: 88px 1fr 76px; */
-  height: 100%;
 }
 
 .Profile-header {
   grid-area: header;
+}
+
+.Profile-container {
+  display: grid;
+  grid-area: profilecontainer;
+  grid-column-gap: 10px;
+  grid-row-gap: 15px;
+  grid-template-areas:
+    "addpost addpost addpost userinfo";
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  margin: 0 10px 0 10px;
 }
 
 .Profile-title {
@@ -28,26 +37,24 @@
 
 .Profile-addPost {
   grid-area: addpost;
+  text-align: center;
 }
 
 .Profile-userInfo {
   grid-area: userinfo;
 }
 
+.Profile-footer {
+  grid-area: footer;
+}
+
 /* MT: Media queries here */
 @media (max-width: 959px) {
   .Profile-container {
     grid-template-areas:
-      "header"
       "userinfo"
       "addpost"
       "footer";
     grid-template-columns: 1fr;
-    /* grid-template-rows: 88px 1fr 76px; */
-  }
-
-  .Profile-addPost,
-  .Profile-userInfo {
-    margin: 0 10px 0 10px;
   }
 }

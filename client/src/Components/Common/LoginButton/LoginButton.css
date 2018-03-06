@@ -1,7 +1,3 @@
-.LoginButton-button {
-  padding: 10px;
-}
-
 .Login-menu {
   width: 336px;
 }
@@ -26,4 +22,10 @@
 .LoginButton-menu-button {
   float: right;
   margin-top: 8px;
+}
+
+@media (max-width: 959px) {
+  .Login-menu {
+    width: 280px;
+  }
 }

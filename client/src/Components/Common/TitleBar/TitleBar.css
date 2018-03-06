@@ -1,11 +1,6 @@
 .TitleBar {
   align-items: center;
   color: white;
-  display: inline-grid;
-  grid-area: header;
-  grid-template-areas:
-    "title title title title";
-  grid-template-columns: 1fr;
 }
 
 .TitleBar-header a {
