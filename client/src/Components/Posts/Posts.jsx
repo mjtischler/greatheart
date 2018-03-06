@@ -17,16 +17,23 @@ class Posts extends Component {
       status: null,
       message: null,
       loaded: false,
-      posts: []
+      posts: [],
+      postReturnLimit: 3
     };
 
+    this.getPosts = this.getPosts.bind(this);
     this.openPost = this.openPost.bind(this);
     this.closePost = this.closePost.bind(this);
+    this.showAllPosts = this.showAllPosts.bind(this);
   }
 
-  componentDidMount () {
+  getPosts (postReturnLimit) {
     fetch('/api/posts', {
-      method: 'GET'
+      method: 'POST',
+      body: JSON.stringify({
+        postReturnLimit: postReturnLimit
+      }),
+      headers: {'Content-Type': 'application/json'}
     }).then(response => response.json()).then(response => {
       // MT: We don't want to alter the state, we want to concat our return to the new state.
       if (response.status === 'OK') {
@@ -62,6 +69,10 @@ class Posts extends Component {
     });
   }
 
+  componentDidMount () {
+    this.getPosts(this.state.postReturnLimit);
+  }
+
   openPost (post) {
     this.setState({
       openModal: true,
@@ -83,11 +94,25 @@ class Posts extends Component {
     return { __html: markup };
   }
 
+  showAllPosts (event) {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    this.setState(previousState => ({
+      openModal: previousState.openModal,
+      status: previousState.status,
+      message: previousState.message,
+      loaded: previousState.loaded,
+      posts: [],
+      postReturnLimit: 0
+    }), this.getPosts(this.postReturnLimit));
+  }
+
   render () {
     if (!this.state.loaded) {
       return <CircularProgress
-        size={80}
-        thickness={7}
+        size={ 80 }
+        thickness={ 7 }
         style={ this.props.sharedStyles.progressLoader }
       />;
     }
@@ -108,6 +133,12 @@ class Posts extends Component {
           </div> : false
         }
         <div className="posts-listItemContainer">
+          <div className="posts-sectionHead">
+            <span className="posts-sectionHead-titleText">Newest Posts</span>
+            <span className="posts-sectionHead-titleSeeAllLink" onClick={ this.showAllPosts }>
+              See All Newest <i className="fas fa-long-arrow-alt-right"></i>
+            </span>
+          </div>
           { this.state.loaded ?
               this.state.posts.map(post =>
                 <Card key={ post._id }>

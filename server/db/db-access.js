@@ -101,7 +101,14 @@ db.writeToCollection = function (collectionName, newRecord, isInsertingMultiple)
 // `query` is an OBJECT that matches the collection's data structure (i.e. the key/pair for which you're searching). Not passing a `query` will return the entire collection.
 // `projection` is an OBJECT with the key `fields`, which is mostly used for excluding and including specific results. It uses a value of 0 or 1 to determine the documents to return. In most cases, you pass in `null` as the `query`: `db.searchCollection('Posts', null, { fields: { postAuthorUserId: 0 } })` would return all matching documents but exclude the postAuthorUserId from the results).
 // `sortOrder` is an OBJECT with a key that matches the field to sort, and a value of 1 (oldest) or -1 (newest) (e.g. {postCreationDate: -1}).
-db.searchCollection = function (collectionName, query, projection, sortOrder) {
+// `postReturnLimit` is an INTEGER that determines how many records to return. A value of `0` returns all records.
+db.searchCollection = function (collectionName, query, projection, sortOrder, postReturnLimit) {
+  // MT: Not all requests need to return a limited collection. To avoid requiring a request to define a postReturnLimit, we can
+  // check for an `undefined` value and set the postReturnLimit to 0 (thus returning all records).
+  if (typeof postReturnLimit === 'undefined') {
+    postReturnLimit = 0;
+  }
+
   return new Promise((resolve, reject) => {
     if (!collectionName) {
       db.response.status = 'ERROR';
@@ -116,7 +123,8 @@ db.searchCollection = function (collectionName, query, projection, sortOrder) {
           const database = client.db(databaseName);
           let message;
 
-          database.collection(collectionName).find(query, projection).sort(sortOrder).toArray((findErr, docs) => {
+          database.collection(collectionName)
+          .find(query, projection).limit(postReturnLimit).sort(sortOrder).toArray((findErr, docs) => {
             if (findErr) {
               throw new Error('An error occured while attempting to find a record: ', findErr);
             } else if (!docs.length) {
