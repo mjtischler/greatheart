@@ -2,7 +2,10 @@
   "restartable": "rs",
   "ignore": [
     ".git",
-    "node_modules/**/node_modules"
+    "node_modules/**/node_modules",
+    "public/posts/images",
+    "logs",
+    "README.md"
   ],
   "verbose": true,
   "execMap": {
@@ -10,15 +13,12 @@
   },
   "watch": [
     "app.js",
+    "config",
     "routes",
     "db/db-access.js",
     "public",
     "views",
     "session"
-  ],
-  "ignore": [
-    "public/posts/images",
-    "README.md"
   ],
   "env": {
     "NODE_ENV": "development"

@@ -23,8 +23,8 @@ A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in
 - [Helpful Resources](#helpful-resources)
 
 ### To Do
-- Move console logging to DB
-- ~~Add reusable footer~~
+- ~~Create logging system~~
+- Better handling of nonexistent URLs
 
 ### Me
 
