@@ -5,7 +5,9 @@ const session = require('express-session');
 const db = require('./db/db-access');
 const path = require('path');
 const favicon = require('serve-favicon');
-const logger = require('morgan');
+const fs = require('fs');
+const morgan = require('morgan');
+const ghLogger = require('./config/ghLogger');
 const bodyParser = require('body-parser');
 const posts = require('./routes/apis/posts');
 const user = require('./routes/apis/user');
@@ -31,7 +33,14 @@ db.testConnection();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(logger('dev'));
+// MT: Set up request logs
+const logDirectory = path.join(__dirname, 'logs');
+// MT: Check for log directory; if it doesn't exist, make it.
+if (!fs.existsSync(logDirectory)) {
+  console.log('Creating log directory.');
+  fs.mkdirSync(logDirectory);
+}
+app.use(morgan('combined', { stream: ghLogger.stream }));
 
 const expiryDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
 const userSession = {
@@ -67,7 +76,8 @@ app.use('/api/logout', logout);
 app.use('/api/signup', signup);
 app.use('/api/admin/addPost', addPost);
 app.use('/api/admin/addImage', addImage);
-// MT: react-router will handle routing on the front-end, so we'll deliver the app files on all non-API requests. The ordering of the server-side routes matter, hence why the APIs are defined above the wildcard ('*') routing.
+// MT: react-router will handle routing on the front-end, so we'll deliver the app files on all non-API requests.
+// The ordering of the server-side routes matter, hence why the APIs are defined above the wildcard ('*') routing.
 app.use('*', index);
 
 // catch 404 and forward to error handler
@@ -82,6 +92,9 @@ app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // MT: Set up error logger
+  ghLogger.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
 
   // render the error page
   res.status(err.status || 500);
