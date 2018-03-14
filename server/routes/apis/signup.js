@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const db = require('../../db/db-access');
+const ghLogger = require('../../config/ghLogger');
 
 // MT: To Do- Create a reusable validation function.
 
@@ -66,13 +67,16 @@ router.post('/', (req, res) => {
               status: 'OK',
               redirected: 'true'
             });
+
+            ghLogger.info(`New user added! status: ${resolve.status}, result: ${resolve.result}, id: ${resolve._id}, userName: ${signup.userName}, ip: ${req.connection.remoteAddress}`);
           })
           .catch(reject => {
             res.json({
               status: 'ERROR',
               message: 'An error occured while adding a user.'
             });
-            console.log(reject.status, reject.result);
+
+            ghLogger.error(`Failure to add user. status: ${reject.status}, result: ${reject.result}, ip: ${req.connection.remoteAddress}`);
           });
       });
     });

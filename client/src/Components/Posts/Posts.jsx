@@ -147,7 +147,9 @@ class Posts extends Component {
                     title={ post.postHeaderText }
                   />
                   <CardHeader
-                    subtitle={ `${post.postAuthorName} on ${getLocalDate(post.postCreationDate)}` }
+                    subtitle={
+                      post.postAuthorName ? `${post.postAuthorName} on ${getLocalDate(post.postCreationDate)}` : 'An error occured!'
+                    }
                   />
                   <CardMedia className="postImage">
                     <img src={`/posts/images/${post.postImage}`} alt="" />

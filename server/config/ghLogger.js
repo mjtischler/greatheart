@@ -1,42 +1,42 @@
 'use strict';
 
 const appRoot = require('app-root-path');
-const winston = require('winston');
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, printf, colorize } = format;
 
-const options = {
-  fileInfo: {
-    level: 'info',
-    filename: `${appRoot}/logs/infoLog.json`,
-    handleExceptions: true,
-    json: true,
-    maxsize: 5242880, // 5MB
-    maxFiles: 5,
-    colorize: false
-  },
-  fileError: {
-    level: 'error',
-    filename: `${appRoot}/logs/errorLog.json`,
-    handleExceptions: true,
-    json: true,
-    maxsize: 5242880, // 5MB
-    maxFiles: 5,
-    colorize: false
-  },
-  console: {
-    level: 'debug',
-    handleExceptions: true,
-    json: false,
-    colorize: true
-  }
-};
+const outputFormat = printf(info => `${info.timestamp} ${info.level}: ${info.message}`);
 
-const ghLogger = new winston.createLogger({
+const ghLogger = createLogger({
+  format: combine(
+    colorize(),
+    timestamp(),
+    outputFormat
+  ),
   transports: [
-    new winston.transports.File(options.fileInfo),
-    new winston.transports.File(options.fileError),
-    new winston.transports.Console(options.console)
+    new transports.File({
+      filename: `${appRoot}/logs/info.log`,
+      level: 'info',
+      maxsize: 5242880, // 5MB
+      maxFiles: 5,
+      handleExceptions: true
+    }),
+    new transports.File({
+      filename: `${appRoot}/logs/error.log`,
+      level: 'error',
+      maxsize: 5242880, // 5MB
+      maxFiles: 5,
+      handleExceptions: true
+    }),
+    new transports.Console({
+      level: 'info',
+      handleExceptions: true
+    }),
+    new transports.Console({
+      level: 'error',
+      handleExceptions: true
+    })
   ],
-  exitOnError: false // do not exit on handled exceptions
+  exitOnError: false
 });
 
 ghLogger.stream = {
