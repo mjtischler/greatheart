@@ -5,6 +5,7 @@ const router = express.Router();
 const db = require('../../../db/db-access');
 // MT: Since we're going to retrieve the user's data via their id that is stored in the cookie, we need this function from mongodb.
 const ObjectID = require('mongodb').ObjectID;
+const ghLogger = require('../../../config/ghLogger');
 
 // MT: Add a post
 router.post('/', (req, res) => {
@@ -43,13 +44,16 @@ router.post('/', (req, res) => {
                 status: 'OK',
                 redirected: 'true'
               });
+
+              ghLogger.info(`Post added successfully! id: ${addedPost.postAuthorUserId}, ip: ${req.connection.remoteAddress}`);
             })
             .catch(reject => {
               res.json({
                 status: 'ERROR',
                 message: 'An error occured while adding a post.'
               });
-              console.log(reject.status, reject.result);
+
+              ghLogger.error(`Failed to add post. status: ${reject.status}, result: ${reject.result}, id: ${addedPost.postAuthorUserId}, ip: ${req.connection.remoteAddress}`);
             });
         } else {
           // MT: If the user is not a valid admin, destroy their session immediately and flag their account.
@@ -57,7 +61,7 @@ router.post('/', (req, res) => {
             if (err) {
               db.updateCollection('Users', resolve.result[0]._id, { $set: { isFlagged: 'true' }});
 
-              console.log('Non-admin tried to add a post, & an error occurred while destroying user session: ', err);
+              ghLogger.error(`Non-admin tried to add a post, & an error occurred while destroying user's session. result: ${err}, id: ${resolve.result[0]._id}, ip: ${req.connection.remoteAddress}`);
 
               return res.json({
                 status: 'ERROR',
@@ -67,7 +71,7 @@ router.post('/', (req, res) => {
 
             db.updateCollection('Users', resolve.result[0]._id, { $set: { isFlagged: 'true' }});
 
-            console.log('Non-admin tried to add a post. Logging out user: ', resolve.result[0]._id);
+            ghLogger.error(`Non-admin tried to add a post, logging out user. result: ${err}, id: ${resolve.result[0]._id}, ip: ${req.connection.remoteAddress}`);
 
             return res.json({
               status: 'ERROR',
@@ -78,7 +82,8 @@ router.post('/', (req, res) => {
       })
       .catch(reject => {
         res.json(reject);
-        console.log(reject.status, reject.result);
+
+        ghLogger.error(`Error adding post. status: ${reject.status}, result: ${reject.result}, id: ${addedPost.postAuthorUserId}, ip: ${req.connection.remoteAddress}`);
       });
   } else {
     res.json({

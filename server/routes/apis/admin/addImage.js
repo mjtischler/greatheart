@@ -17,6 +17,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ dest: path.join(__dirname, '../../../Public/posts/images/'), storage: storage });
 const fs = require('fs');
+const ghLogger = require('../../../config/ghLogger');
 
 // MT: Add an image. The `upload.single({{STRING}})` must match the name appended in the client (e.g. `data.append('postImage', this.state.image);`).
 router.post('/', upload.single('postImage'), (req, res) => {
@@ -26,9 +27,10 @@ router.post('/', upload.single('postImage'), (req, res) => {
 
     fs.unlink(file, error => {
       if (error) {
+        ghLogger.error(`Unable to delete file. message: ${error.toString()}, ip: ${req.connection.remoteAddress}`);
         console.error(error.toString());
       } else {
-        console.error(`${file} deleted`);
+        ghLogger.info(`${file} deleted, ip: ${req.connection.remoteAddress}`);
       }
     });
 
@@ -52,11 +54,15 @@ router.post('/', upload.single('postImage'), (req, res) => {
       status: 'OK',
       message: 'Success!'
     });
+
+    ghLogger.info(`File successfully uploaded! fileName: ${req.file.filename}, ip: ${req.connection.remoteAddress}`);
   } else {
     res.json({
       status: 'ERROR',
       message: 'An unknown error occurred. Dang.'
     });
+
+    ghLogger.error(`Unable to upload file. fileName: ${req.file.filename}, ip: ${req.connection.remoteAddress}`);
   }
 });
 

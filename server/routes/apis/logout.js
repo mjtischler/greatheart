@@ -5,6 +5,7 @@ const router = express.Router();
 const db = require('../../db/db-access');
 // MT: Since we're going to retrieve the user's data via their id that is stored in the cookie, we need this function from mongodb.
 const ObjectID = require('mongodb').ObjectID;
+const ghLogger = require('../../config/ghLogger');
 
 // MT: Get logged in user data
 router.get('/', (req, res) => {
@@ -15,7 +16,7 @@ router.get('/', (req, res) => {
       if (req.session) {
         req.session.destroy(err => {
           if (err) {
-            console.log('Error occurred while destroying user session: ', err);
+            ghLogger.error(`Failed to destroy user session. message: ${err}, ip: ${req.connection.remoteAddress}`);
 
             return res.json({
               status: 'ERROR',
@@ -23,24 +24,28 @@ router.get('/', (req, res) => {
             });
           }
 
-          console.log('Logging out user: ', resolve.result[0]._id);
+          ghLogger.info(`Logging out user! id: ${resolve.result[0]._id}, ip: ${req.connection.remoteAddress}`);
+
           return res.json({
             status: 'OK',
             redirected: 'true'
           });
         });
       } else {
-        console.log('Session not found, redirecting client anyways.');
+        ghLogger.error(`Session not found, redirecting client anyways. ip: ${req.connection.remoteAddress}`);
 
         return res.json({
           status: 'ERROR',
           redirected: 'true'
         });
       }
+
+      return false;
     })
     .catch(reject => {
       res.json(reject);
-      console.log(reject.status, reject.result);
+
+      ghLogger.error(`Unknown logout failure. Logging out user. status: ${reject.status}, message: ${reject.result}, ip: ${req.connection.remoteAddress}`);
     });
 });
 

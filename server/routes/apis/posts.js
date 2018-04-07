@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../db/db-access');
+const ghLogger = require('../../config/ghLogger');
 
 // MT: Get posts
 router.post('/', (req, res) => {
@@ -14,14 +15,16 @@ router.post('/', (req, res) => {
         status: 'OK',
         posts: resolve.result
       });
+
+      ghLogger.info(`Retrieved posts! status: ${resolve.status}, numberOfPosts: ${resolve.result.length}, ip: ${req.connection.remoteAddress}`);
     })
     .catch(reject => {
-      console.log('Error retrieving posts: ', reject);
-
       res.json({
         status: 'ERROR',
         result: 'There was an error retrieving the posts.'
       });
+
+      ghLogger.error(`There was a problem retrieving posts. result: ${reject.result}, ip: ${req.connection.remoteAddress}`);
     });
 });
 
