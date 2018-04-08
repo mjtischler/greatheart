@@ -1,11 +1,15 @@
 'use strict';
 
+// MT: Let's create out gitignore'd directory structure. For the first run, remember to add the appropriate files to
+// `db/access` and `cookies`, and to execute `npm run build` from the client directory after the initial failure.
+const appStructure = require('./config/appStructure');
+appStructure.createDirectories(__dirname);
+
 const express = require('express');
 const session = require('express-session');
 const db = require('./db/db-access');
 const path = require('path');
 const favicon = require('serve-favicon');
-const fs = require('fs');
 const morgan = require('morgan');
 const ghLogger = require('./config/ghLogger');
 const bodyParser = require('body-parser');
@@ -21,6 +25,9 @@ const uuidv1 = require('uuid/v1');
 // MT: The path to our secret key for cookie session storage.
 const secretKey = require('./cookies/secret-key.json');
 const app = express();
+const redis = require('redis');
+const client = redis.createClient();
+const RedisStore = require('connect-redis')(session);
 
 app.use(express.static(path.join(__dirname, './Public')));
 
@@ -33,17 +40,16 @@ db.testConnection();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// MT: Set up request logs
-const logDirectory = path.join(__dirname, 'logs');
-// MT: Check for log directory; if it doesn't exist, make it.
-if (!fs.existsSync(logDirectory)) {
-  console.log('Creating log directory.');
-  fs.mkdirSync(logDirectory);
-}
 app.use(morgan('combined', { stream: ghLogger.stream }));
 
+// MT: Since the implementation of the cluster, we need to use redis stores to maintain client sessions.
 const expiryDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
 const userSession = {
+  store: new RedisStore({
+    port: 6379,
+    host: 'localhost',
+    client: client
+  }),
   genid: () => uuidv1(),
   secret: secretKey,
   duration: 30 * 60 * 1000,
