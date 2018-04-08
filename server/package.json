@@ -10,6 +10,7 @@
     "app-root-path": "^2.0.1",
     "bcrypt": "^1.0.3",
     "body-parser": "~1.18.2",
+    "connect-redis": "^3.3.3",
     "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "express": "~4.15.5",

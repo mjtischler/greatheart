@@ -25,7 +25,7 @@ A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in
 ### To Do
 - ~~Create logging system~~
 - ~~Colorize ghLogger console outputs~~
-- Autocreate directory structure to include empty folders
+- ~~Autocreate directory structure to include empty folders~~
 - Create log files for each api
 - Fix issue with `maxsize` not rotating logs
 - Better handling of nonexistent URLs
@@ -41,6 +41,8 @@ Welcome! I'm glad you stopped by. Please feel free to submit a pull request, rev
 
 ### Getting Started
 
+**NOTE**: As of 04/08/2018, Redis has been implemented to handle the new Node cluster functionality. This will break Windows installations that don't utilize Redis.
+
 First, clone the repo:
 
 `git clone git@github.com:mjtischler/greatheart.git`
@@ -50,14 +52,6 @@ This project requires [Node.js](https://nodejs.org/en/download/), so be sure you
 `curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -`
 
 `sudo apt-get install -y nodejs`
-
-You'll need to create the following folders in `greatheart/server`:
-
-`cookies`
-
-`db/access`
-
-`Public`
 
 This project will require installing dependencies from both the `/greatheart/client` and `/greatheart/server` directories using:
 

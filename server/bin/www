@@ -1,13 +1,12 @@
-#!/usr/bin/env node
 'use strict';
 
 // Module dependencies.
-const app = require('../app');
 const debug = require('debug')('react-backend:server');
+const cluster = require('cluster');
+const app = require('../app');
 const http = require('http');
-
-// Create HTTP server.
 const server = http.createServer(app);
+const ghLogger = require('../config/ghLogger');
 
 // Normalize a port into a number, string, or false.
 function normalizePort (val) {
@@ -22,9 +21,11 @@ function normalizePort (val) {
     // port number
     return normalizedPort;
   }
-
   return false;
 }
+
+// Get port from environment and store in Express.
+const port = normalizePort(process.env.PORT || '3001');
 
 // Event listener for HTTP server "listening" event.
 function onListening () {
@@ -32,10 +33,6 @@ function onListening () {
   const bind = typeof addr === 'string' ? `pipe + ${addr}` : `port ${addr.port}`;
   debug(`Listening on + ${bind}`);
 }
-
-// Get port from environment and store in Express.
-const port = normalizePort(process.env.PORT || '3001');
-app.set('port', port);
 
 // Event listener for HTTP server "error" event.
 function onError (error) {
@@ -48,15 +45,40 @@ function onError (error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
+      ghLogger.error(`${bind} requires elevated privileges`);
       throw new Error(`${bind} requires elevated privileges`);
     case 'EADDRINUSE':
+      ghLogger.error(`${bind} is already in use`);
       throw new Error(`${bind} is already in use`);
     default:
       throw error;
   }
 }
 
-// Listen on provided port, on all network interfaces.
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+if (cluster.isMaster) {
+  const workerCount = require('os').cpus().length;
+
+  ghLogger.info(`Master cluster ${process.pid} is running and setting up ${workerCount} workers...`);
+
+  for (let i = 0; i < workerCount; i++) {
+    cluster.fork();
+  }
+
+  cluster.on('online', worker => {
+    ghLogger.info(`Worker ${worker.process.pid} is online`);
+  });
+
+  cluster.on('exit', (worker, code, signal) => {
+    ghLogger.info(`Worker ${worker.process.pid} died with code: ${code} and signal: ${signal}`);
+    ghLogger.info('Starting a new worker');
+    cluster.fork();
+  });
+} else {
+  // Listen on provided port, on all network interfaces.
+  server.listen(port, () => {
+    ghLogger.info(`Process ${process.pid} is listening to all incoming requests`);
+  });
+
+  server.on('error', onError);
+  server.on('listening', onListening);
+}

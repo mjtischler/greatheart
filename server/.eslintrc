@@ -166,7 +166,10 @@
         "no-plusplus": 0,
         "no-prototype-builtins": 2,
         "prefer-template": 2,
-        "template-curly-spacing": [2, "never"]
+        "template-curly-spacing": [2, "never"],
+        "node/no-extraneous-require": ["error", {
+          "allowModules": ["redis"]
+        }]
     },
     "plugins": [
         "node"
