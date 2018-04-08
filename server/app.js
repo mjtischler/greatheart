@@ -22,9 +22,9 @@ const uuidv1 = require('uuid/v1');
 const secretKey = require('./cookies/secret-key.json');
 const app = express();
 
-app.use(express.static(path.join(__dirname, './public')));
+app.use(express.static(path.join(__dirname, './Public')));
 
-app.use(favicon(path.join(__dirname, './public', './favicon.ico')));
+app.use(favicon(path.join(__dirname, './Public', './favicon.ico')));
 
 // MT: Test our database connection on load
 db.testConnection();

@@ -24,7 +24,8 @@ A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in
 
 ### To Do
 - ~~Create logging system~~
-~~- Colorize ghLogger console outputs~~
+- ~~Colorize ghLogger console outputs~~
+- Autocreate directory structure to include empty folders
 - Create log files for each api
 - Fix issue with `maxsize` not rotating logs
 - Better handling of nonexistent URLs
@@ -44,7 +45,29 @@ First, clone the repo:
 
 `git clone git@github.com:mjtischler/greatheart.git`
 
-This project requires [Node.js](https://nodejs.org/en/download/), so be sure you have it installed on your platform of choice. This project will require installing dependencies from both the `/greatheart/client` and `/greatheart/server` directories using:
+This project requires [Node.js](https://nodejs.org/en/download/), so be sure you have at least version 8.x it installed on your platform of choice. On a Debian version of Linux, you can make sure you're pointed to the latest NodeJS and install it with:
+
+`curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -`
+
+`sudo apt-get install -y nodejs`
+
+You'll need to create the following folders in `greatheart/server`:
+
+`cookies`
+
+`db/access`
+
+`Public`
+
+This project will require installing dependencies from both the `/greatheart/client` and `/greatheart/server` directories using:
+
+`npm install`
+
+**NOTE**: On Linux there is currently an issue with the `uglifyjs-webpack-plugin`, so you'll want to run the following commands from the `greatheart/client` directory:
+
+`npm install`
+
+`npm i -D uglifyjs-webpack-plugin@beta`
 
 `npm install`
 
