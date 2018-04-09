@@ -29,7 +29,7 @@ A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in
 - Create log files for each api
 - Fix issue with `maxsize` not rotating logs
 - Better handling of nonexistent URLs
-- Fix non-admin profile page
+- ~~Fix non-admin profile page~~
 
 ### Me
 
