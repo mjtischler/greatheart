@@ -53,8 +53,7 @@ class Posts extends Component {
           loaded: true
         }));
       }
-    })
-    .catch(reject => {
+    }).catch(reject => {
       this.setState(previousState => ({
         posts: previousState.posts.concat([
           {
@@ -140,28 +139,28 @@ class Posts extends Component {
             </span>
           </div>
           { this.state.loaded ?
-              this.state.posts.map(post =>
-                <Card key={ post._id }>
-                  <CardTitle
-                    className="postHeader"
-                    title={ post.postHeaderText }
-                  />
-                  <CardHeader
-                    subtitle={
-                      post.postAuthorName ? `${post.postAuthorName} on ${getLocalDate(post.postCreationDate)}` : 'An error occured!'
-                    }
-                  />
-                  <CardMedia className="postImage">
-                    <img src={`/posts/images/${post.postImage}`} alt="" />
-                  </CardMedia>
-                  <CardText className="postText">
-                    <div dangerouslySetInnerHTML={ this.createMarkup(post.postBodyText) }></div>
-                  </CardText>
-                  <CardActions className="postActions">
-                    <RaisedButton label="More..." primary={ true } onClick={ () => this.openPost(post) }/>
-                  </CardActions>
-                </Card>
-              )
+            this.state.posts.map(post =>
+              <Card key={ post._id }>
+                <CardTitle
+                  className="postHeader"
+                  title={ post.postHeaderText }
+                />
+                <CardHeader
+                  subtitle={
+                    post.postAuthorName ? `${post.postAuthorName} on ${getLocalDate(post.postCreationDate)}` : 'An error occured!'
+                  }
+                />
+                <CardMedia className="postImage">
+                  <img src={`/posts/images/${post.postImage}`} alt="" />
+                </CardMedia>
+                <CardText className="postText">
+                  <div dangerouslySetInnerHTML={ this.createMarkup(post.postBodyText) }></div>
+                </CardText>
+                <CardActions className="postActions">
+                  <RaisedButton label="More..." primary={ true } onClick={ () => this.openPost(post) }/>
+                </CardActions>
+              </Card>
+            )
             : <div>There are no posts.</div>
           }
         </div>

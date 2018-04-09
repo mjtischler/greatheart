@@ -5,6 +5,7 @@ import TitleBar from '../Common/TitleBar/TitleBar.jsx';
 import AddPost from './Components/AddPost/AddPost.jsx';
 import Footer from '../Common/Footer/Footer.jsx';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
+import Posts from '../Posts/Posts.jsx';
 import '../Home/Home.css';
 import './Profile.css';
 
@@ -52,58 +53,59 @@ class Profile extends Component {
       />;
     }
 
-    if (this.state.profileData[0].isAdmin) {
-      return (
-        <div className="Profile">
-          <div className="Profile-header">
-            <TitleBar
-              loaded={ this.state.loaded }
-              isLoggedIn={ true }
-            />
+    return (this.state.profileData[0].isAdmin ?
+      <div className="Profile">
+        <div className="Profile-header">
+          <TitleBar
+            loaded={ this.state.loaded }
+            isLoggedIn={ true }
+          />
+        </div>
+        <div className="Profile-container">
+          <div className="Profile-addPost">
+            <AddPost></AddPost>
           </div>
-          <div className="Profile-container">
-            <div className="Profile-addPost">
-              <AddPost></AddPost>
-            </div>
-            <div className="Profile-userInfo">
-              <Card>
-                {this.state.profileData.map(profile =>
-                  <CardHeader
-                    key={ profile.userId }
-                    title={ profile.userName }
-                    subtitle={ profile.email }
-                  />
-                )}
-              </Card>
-            </div>
-          </div>
-          <div className="Profile-footer">
-            <Footer />
+          <div className="Profile-userInfo">
+            <Card>
+              {this.state.profileData.map(profile =>
+                <CardHeader
+                  key={ profile.userId }
+                  title={ profile.userName }
+                  subtitle={ profile.email }
+                />
+              )}
+            </Card>
           </div>
         </div>
-      );
-    }
-
-    return (
+        <div className="Profile-footer">
+          <Footer />
+        </div>
+      </div>
+      :
       <div className="Profile">
-        <TitleBar
-          className="Profile-header"
-          loaded={ this.state.loaded }
-          isLoggedIn={ this.state.isLoggedIn }
-        />
-        <div className="Profile-userInfo">
-          <Card>
-            { this.state.profileData.map(profile =>
-              <CardHeader
-                key={ profile.userId }
-                title={ profile.userName }
-                subtitle={ profile.email }
-              />
-            )}
-            <CardText>
-
-            </CardText>
-          </Card>
+        <div className="Profile-header">
+          <TitleBar
+            loaded={ this.state.loaded }
+            isLoggedIn={ true }
+          />
+        </div>
+        <div className="Profile-container">
+          <div className="Profile-viewPosts">
+            <Posts
+              sharedStyles={ this.props.sharedStyles }
+            />
+          </div>
+          <div className="Profile-userInfo">
+            <Card>
+              {this.state.profileData.map(profile =>
+                <CardHeader
+                  key={ profile.userId }
+                  title={ profile.userName }
+                  subtitle={ profile.email }
+                />
+              )}
+            </Card>
+          </div>
         </div>
         <div className="Profile-footer">
           <Footer />

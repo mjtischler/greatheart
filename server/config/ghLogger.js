@@ -41,7 +41,7 @@ const ghLogger = createLogger({
 
 ghLogger.stream = {
   write: function (message, encoding) {
-    ghLogger.info(message);
+    ghLogger.info(message, encoding);
   }
 };
 

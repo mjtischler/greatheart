@@ -35,8 +35,11 @@
   text-decoration: none;
 }
 
-.Profile-addPost {
+.Profile-addPost, .Profile-viewPosts {
   grid-area: addpost;
+}
+
+.Profile-addPost {
   text-align: center;
 }
 
