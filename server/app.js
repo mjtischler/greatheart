@@ -6,6 +6,7 @@ const appStructure = require('./config/appStructure');
 appStructure.createDirectories(__dirname);
 
 const express = require('express');
+const helmet = require('helmet');
 const session = require('express-session');
 const db = require('./db/db-access');
 const path = require('path');
@@ -25,12 +26,21 @@ const uuidv1 = require('uuid/v1');
 // MT: The path to our secret key for cookie session storage.
 const secretKey = require('./cookies/secret-key.json');
 const app = express();
+// MT: Use `helmet` to set specialized HTTP headers to protect the app. Also spoofs client into thinking the app is served by PHP.
+// We will only see the appropriate headers on a deployed app, and not from the webpack dev instance.
+app.use(
+  helmet(),
+  helmet.hsts({
+    maxAge: 5184000
+  }),
+  helmet.hidePoweredBy({ setTo: 'PHP/7.2.4' })
+);
+
 const redis = require('redis');
 const client = redis.createClient();
 const RedisStore = require('connect-redis')(session);
 
 app.use(express.static(path.join(__dirname, './Public')));
-
 app.use(favicon(path.join(__dirname, './Public', './favicon.ico')));
 
 // MT: Test our database connection on load
