@@ -4,7 +4,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import TitleBar from '../Common/TitleBar/TitleBar.jsx';
 import AddPost from './Components/AddPost/AddPost.jsx';
 import Footer from '../Common/Footer/Footer.jsx';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { Card, CardHeader } from 'material-ui/Card';
 import Posts from '../Posts/Posts.jsx';
 import '../Home/Home.css';
 import './Profile.css';

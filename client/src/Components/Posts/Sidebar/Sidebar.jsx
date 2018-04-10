@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {Card, CardHeader, CardTitle, CardText} from 'material-ui/Card';
 import AppBar from 'material-ui/AppBar';
 import { List, ListItem } from 'material-ui/List';
