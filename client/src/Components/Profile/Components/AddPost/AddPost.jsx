@@ -106,7 +106,8 @@ class AddPost extends Component {
             status: response.status,
             message: response.message,
             image: null,
-            imageAdded: false
+            imageAdded: false,
+            redirectLocation: response.redirected ? '/' : null
           });
         }
       });
