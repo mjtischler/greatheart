@@ -19,6 +19,7 @@ const storage = multer.diskStorage({
 const upload = multer({ dest: path.join(__dirname, '../../../Public/posts/images/'), storage: storage });
 const fs = require('fs');
 const ghLogger = require('../../../config/ghLogger');
+const ghClamscan = require('../../../config/ghClamscan');
 
 // MT: Add an image. The `upload.single({{STRING}})` must match the name appended in the client (e.g. `data.append('postImage', this.state.image);`).
 router.post('/', upload.single('postImage'), (req, res) => {
@@ -50,14 +51,47 @@ router.post('/', upload.single('postImage'), (req, res) => {
         message: 'Images must be less than 2.5MB in size.'
       });
     } else if (req.file.mimetype === 'image/jpeg' && req.file.size < 2600000) {
-      req.session.postImage = req.file.filename;
+      ghClamscan.is_infected(path.join(__dirname, '../../../Public/posts/images/', req.file.filename), (err, fileName, is_infected) => {
+        if (err) {
+          ghLogger.error(`Clamscan error from ${req.session.userName}! error: ${err} fileName: ${req.file.filename}, ip: ${req.connection.remoteAddress}`);
 
-      res.json({
-        status: 'OK',
-        message: 'Success!'
+          res.json({
+            status: 'ERROR',
+            message: 'An unknown error occured. Please try again.'
+          });
+        }
+
+        if (is_infected) {
+          db.updateCollection('Users', req.session.userId, { $set: { isFlagged: 'true' }});
+
+          ghLogger.error(`Clamscan detected an infected file from user ${req.session.userName}! fileName: ${req.file.filename}, ip: ${req.connection.remoteAddress}`);
+
+          if (req.session) {
+            req.session.destroy(sessionErr => {
+              if (sessionErr) {
+                ghLogger.error(`Infected file upload attempted. Failed to destroy user session. message: ${sessionErr}, ip: ${req.connection.remoteAddress}`);
+              } else {
+                ghLogger.error(`Infected file upload attempted. Destroying user session! ip: ${req.connection.remoteAddress}`);
+              }
+            });
+          }
+
+          res.json({
+            status: 'ERROR',
+            message: 'You have uploaded an invalid file.',
+            redirected: true
+          });
+        } else {
+          ghLogger.info(`File successfully scanned and uploaded from user ${req.session.userName}! fileName: ${req.file.filename}, ip: ${req.connection.remoteAddress}`);
+
+          req.session.postImage = req.file.filename;
+
+          res.json({
+            status: 'OK',
+            message: 'Success!'
+          });
+        }
       });
-
-      ghLogger.info(`File successfully uploaded! fileName: ${req.file.filename}, ip: ${req.connection.remoteAddress}`);
     } else {
       res.json({
         status: 'ERROR',

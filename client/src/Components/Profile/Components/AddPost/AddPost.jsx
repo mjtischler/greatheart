@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import CircularProgress from 'material-ui/CircularProgress';
 import {Card, CardActions, CardHeader} from 'material-ui/Card';
 import InfoModal from '../../../Common/InfoModal/InfoModal.jsx';
 import TextField from 'material-ui/TextField';
@@ -26,6 +28,7 @@ class AddPost extends Component {
       image: null,
       imagePreviewUrl: null,
       imageAdded: false,
+      imageIsUploading: false,
       openModal: false,
       status: null,
       message: null,
@@ -81,7 +84,8 @@ class AddPost extends Component {
         this.setState({
           image: upload,
           imagePreviewUrl: reader.result,
-          imageAdded: true
+          imageAdded: true,
+          imageIsUploading: true
         });
 
         this.uploadImage();
@@ -107,7 +111,14 @@ class AddPost extends Component {
             message: response.message,
             image: null,
             imageAdded: false,
+            imageIsUploading: false,
             redirectLocation: response.redirected ? '/' : null
+          });
+        } else if (response.status === 'OK') {
+          this.setState({
+            postHeaderText: this.state.postHeaderText,
+            postBodyText: this.state.postBodyText,
+            imageIsUploading: false
           });
         }
       });
@@ -177,57 +188,70 @@ class AddPost extends Component {
 
   render () {
     return (
-      <div>
-        {/*
-          MT: Render the modal when the AddPost's openModal state changes, and pass the necessary properties into the dialog.
-        */}
-        { this.state.openModal ?
-          <InfoModal
-            open={ this.state.openModal }
-            status={ this.state.status }
-            message={ this.state.message }
-            redirectLocation={ this.state.redirectLocation }
-          /> : false
-        }
-        <Card>
-          <CardHeader
-            textStyle={ AddPostStyles.cardHeaderText }
-            title="Add Post"
-          />
-          <TextField
-            hintText="The header of your post..."
-            id="postHeaderText"
-            maxLength="58"
-            style={ AddPostStyles.postHeaderText }
-            onChange={ this.handleHeaderChange }
-          /><br />
-          <RaisedButton
-            primary={ true }
-            className="AddPost-add-image-button"
-            containerElement='label'
-            label='Add Image'
-            onClick={ this.handleErrors }>
-              <input type="file" className="AddPost-upload-input" onChange={ this.handleAddedImage } />
-          </RaisedButton>
-          <span className="AddPost-image-text">{ this.state.image ? this.state.image.name : 'No image selected' }</span>
-          <br />
-          <ReactQuill
-            id="postBodyText"
-            className="AddPost-post-body"
-            placeholder="Your post..."
-            onChange={ this.handleBodyChange }>
-          </ReactQuill>
-          <CardActions>
+      this.state.imageIsUploading ?
+        <CircularProgress
+          size={80}
+          thickness={7}
+          style={this.props.progressStyle}
+        /> :
+        <div>
+          {/*
+            MT: Render the modal when the AddPost's openModal state changes, and pass the necessary properties into the dialog.
+          */}
+          { this.state.openModal ?
+            <InfoModal
+              open={ this.state.openModal }
+              status={ this.state.status }
+              message={ this.state.message }
+              redirectLocation={ this.state.redirectLocation }
+            /> : false
+          }
+          <Card>
+            <CardHeader
+              textStyle={ AddPostStyles.cardHeaderText }
+              title="Add Post"
+            />
+            <TextField
+              hintText={ this.state.postHeaderText ? this.state.postHeaderText : 'The header of your post...' }
+              defaultValue={ this.state.postHeaderText ? this.state.postHeaderText : null }
+              id="postHeaderText"
+              maxLength="58"
+              style={ AddPostStyles.postHeaderText }
+              onChange={ this.handleHeaderChange }
+            /><br />
             <RaisedButton
               primary={ true }
-              label="Submit Post"
-              onClick={ this.handleSubmitPostButtonClick }
-            />
-          </CardActions>
-        </Card>
-      </div>
+              className="AddPost-add-image-button"
+              containerElement='label'
+              label='Add Image'
+              onClick={ this.handleErrors }>
+              <input type="file" className="AddPost-upload-input" onChange={ this.handleAddedImage } />
+            </RaisedButton>
+            <span className="AddPost-image-text">{ this.state.image ? this.state.image.name : 'No image selected' }</span>
+            <br />
+            <ReactQuill
+              id="postBodyText"
+              className="AddPost-post-body"
+              placeholder={ this.state.postBodyText ? this.state.postHeaderText : 'Your post...' }
+              defaultValue={ this.state.postBodyText ? this.state.postBodyText : null }
+              onChange={ this.handleBodyChange }>
+            </ReactQuill>
+            <CardActions>
+              <RaisedButton
+                primary={ true }
+                label="Submit Post"
+                onClick={ this.handleSubmitPostButtonClick }
+              />
+            </CardActions>
+          </Card>
+        </div>
     );
   }
 }
+
+AddPost.propTypes = {
+  progressStyle: PropTypes.object
+};
+
 
 export default AddPost;

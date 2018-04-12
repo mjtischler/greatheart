@@ -23,13 +23,11 @@ A webapp template utilizing MongoDB, Express, React, and Node.js, and a _work in
 - [Helpful Resources](#helpful-resources)
 
 ### To Do
-- ~~Create logging system~~
-- ~~Colorize ghLogger console outputs~~
-- ~~Autocreate directory structure to include empty folders~~
+- ~~Scan user uploads for malware~~
+- Update ClamAV with daily definitions
 - Create log files for each api
 - Fix issue with `maxsize` not rotating logs
 - Better handling of nonexistent URLs
-- ~~Fix non-admin profile page~~
 
 ### Me
 
@@ -47,7 +45,11 @@ First, clone the repo:
 
 `git clone git@github.com:mjtischler/greatheart.git`
 
-This project requires [Node.js](https://nodejs.org/en/download/), so be sure you have at least version 8.x it installed on your platform of choice. On a Debian version of Linux, you can make sure you're pointed to the latest NodeJS and install it with:
+The TGP server utilizes [ClamAV](https://www.clamav.net/documents/installing-clamav) and [clamscan](https://github.com/kylefarris/clamscan) to sanitize user uploads. Clamscan is added via npm, but you'll need to follow the install instructions for ClamAV via the link above. On a Debian distro use:
+
+`sudo apt-get install clamav`
+
+This project requires [Node.js](https://nodejs.org/en/download/), so be sure you have at least version 8.x it installed on your platform of choice. On a Debian distro you can make sure you're pointed to the latest NodeJS and install it with:
 
 `curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -`
 
