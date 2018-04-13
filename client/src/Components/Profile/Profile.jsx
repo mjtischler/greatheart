@@ -63,7 +63,9 @@ class Profile extends Component {
         </div>
         <div className="Profile-container">
           <div className="Profile-addPost">
-            <AddPost></AddPost>
+            <AddPost
+              progressStyle={this.props.sharedStyles.progressLoader}
+            />
           </div>
           <div className="Profile-userInfo">
             <Card>

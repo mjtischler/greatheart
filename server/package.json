@@ -1,6 +1,6 @@
 {
   "name": "tgp-server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
@@ -10,6 +10,7 @@
     "app-root-path": "^2.0.1",
     "bcrypt": "^1.0.3",
     "body-parser": "~1.18.2",
+    "clamscan": "^0.8.4",
     "connect-redis": "^3.3.3",
     "crypto": "^1.0.1",
     "debug": "~2.6.9",
