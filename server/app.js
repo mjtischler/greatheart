@@ -8,7 +8,6 @@ appStructure.createDirectories(__dirname);
 const express = require('express');
 const helmet = require('helmet');
 const session = require('express-session');
-const db = require('./db/db-access');
 const path = require('path');
 const favicon = require('serve-favicon');
 const morgan = require('morgan');
@@ -43,8 +42,6 @@ const RedisStore = require('connect-redis')(session);
 app.use(express.static(path.join(__dirname, './Public')));
 app.use(favicon(path.join(__dirname, './Public', './favicon.ico')));
 
-// MT: Test our database connection on load
-db.testConnection();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

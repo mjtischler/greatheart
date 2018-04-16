@@ -3,6 +3,7 @@
 // Module dependencies.
 const debug = require('debug')('react-backend:server');
 const cluster = require('cluster');
+const db = require('../db/db-access');
 const app = require('../app');
 const http = require('http');
 const server = http.createServer(app);
@@ -56,6 +57,9 @@ function onError (error) {
 }
 
 if (cluster.isMaster) {
+  // MT: Test our database connection on load
+  db.testConnection();
+
   const workerCount = require('os').cpus().length;
 
   ghLogger.info(`Master cluster ${process.pid} is running and setting up ${workerCount} workers...`);

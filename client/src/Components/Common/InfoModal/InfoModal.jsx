@@ -12,7 +12,8 @@ class InfoModal extends Component {
       open: props.open,
       status: props.status,
       message: props.message,
-      redirectLocation: props.redirectLocation
+      redirectLocation: props.redirectLocation,
+      disableButton: props.disableButton
     };
 
     this.handleClose = this.handleClose.bind(this);
@@ -49,7 +50,7 @@ class InfoModal extends Component {
       <div>
         <Dialog
           title={ this.state.status }
-          actions={ actions }
+          actions={ this.state.disableButton ? null : actions }
           modal={ true }
           open={ this.state.open }
         >
@@ -64,7 +65,8 @@ InfoModal.propTypes = {
   open: PropTypes.bool.isRequired,
   status: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
-  redirectLocation: PropTypes.string
+  redirectLocation: PropTypes.string,
+  disableButton: PropTypes.bool
 };
 
 export default InfoModal;
