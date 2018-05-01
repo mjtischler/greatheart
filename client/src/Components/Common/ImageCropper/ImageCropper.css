@@ -1,0 +1,9 @@
+.box {
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 10px;
+}
+
+.image-preview {
+  overflow: hidden;
+}

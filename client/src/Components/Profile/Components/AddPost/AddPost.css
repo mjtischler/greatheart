@@ -10,12 +10,26 @@
   display: none;
 }
 
-.AddPost-image-text {
-  color: rgb(195,195,195);
+.AddPost-card-actions-container {
+  display: grid;
+  grid-column-gap: 10px;
+  grid-template-areas:
+    ". . . . . . imagePreview submitButton";
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
-.AddPost-add-image-button {
-  margin-right: 10px;
+.AddPost-card-actions-image-preview-container {
+  max-height: 36px;
+  grid-area: imagePreview;
+}
+
+.AddPost-card-actions-image-preview {
+  max-height: inherit;
+}
+
+.AddPost-card-actions-button {
+  grid-area: submitButton;
+  max-width: 80px;
 }
 
 /* MT: Quill text editor customizations */

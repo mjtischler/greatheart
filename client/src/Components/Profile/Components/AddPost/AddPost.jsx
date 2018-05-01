@@ -21,6 +21,8 @@ class AddPost extends Component {
   constructor (props) {
     super(props);
 
+    this.getCroppedImage = this.getCroppedImage.bind(this);
+
     this.state = {
       postHeaderText: null,
       postBodyText: null,
@@ -31,14 +33,16 @@ class AddPost extends Component {
       openModal: false,
       status: null,
       message: null,
-      redirectLocation: null
+      redirectLocation: null,
+      openCropper: false,
+      imageURL: null,
+      getCroppedImage: this.getCroppedImage
     };
 
     this.handleHeaderChange = this.handleHeaderChange.bind(this);
     this.handleBodyChange = this.handleBodyChange.bind(this);
-    this.handleAddedImage = this.handleAddedImage.bind(this);
-    this.uploadImage = this.uploadImage.bind(this);
     this.handleSubmitPostButtonClick = this.handleSubmitPostButtonClick.bind(this);
+    this.openCropperModal = this.openCropperModal.bind(this);
     this.handleErrors = this.handleErrors.bind(this);
   }
 
@@ -56,126 +60,90 @@ class AddPost extends Component {
     this.setState({ postBodyText: body });
   }
 
-  handleAddedImage (file) {
-    // This prevents ghost click.
-    file.preventDefault();
-    this.handleErrors();
-
-    const reader = new FileReader();
-    const upload = file.target.files[0];
-
-    if (upload.type !== 'image/jpeg') {
-      this.setState({
-        openModal: true,
-        status: 'ERROR',
-        message: 'Images must be in JPEG format.'
-      });
-    } else if (upload.size > 2600000) {
-      this.setState({
-        openModal: true,
-        status: 'ERROR',
-        message: 'Images must be less than 2.5MB in size.'
-      });
-    } else {
-      reader.readAsDataURL(upload);
-
-      reader.onloadend = () => {
-        this.setState({
-          openModal: true,
-          image: upload,
-          imagePreviewUrl: reader.result,
-          imageAdded: true,
-          imageIsUploading: true,
-          status: 'Uploading image',
-          message: 'Please wait...',
-          disableButton: true
-        });
-
-        this.uploadImage();
-      };
-    }
-  }
-
-  uploadImage () {
-    if (this.state.image) {
-      // MT: Append the file into a form to make it readable by the server.
-      const data = new FormData();
-      data.append('postImage', this.state.image);
-
-      fetch('/api/admin/addImage', {
-        method: 'POST',
-        credentials: 'include',
-        body: data
-      }).then(response => response.json()).then(response => {
-        if (response.status === 'ERROR') {
-          this.setState({
-            openModal: true,
-            status: response.status,
-            message: response.message,
-            image: null,
-            imageAdded: false,
-            imageIsUploading: false,
-            disableButton: false,
-            redirectLocation: response.redirected ? '/' : null
-          });
-        } else if (response.status === 'OK') {
-          this.setState({
-            postHeaderText: this.state.postHeaderText,
-            postBodyText: this.state.postBodyText,
-            openModal: false,
-            disableButton: false,
-            imageIsUploading: false
-          });
-        }
-      });
-    }
-  }
-
   handleSubmitPostButtonClick (event) {
     // This prevents ghost click.
     event.preventDefault();
     this.handleErrors();
 
-    if (!this.state.image || this.state.imageAdded) {
-      fetch('/api/admin/addPost', {
-        method: 'POST',
-        credentials: 'include',
-        body: JSON.stringify({
-          postHeaderText: this.state.postHeaderText,
-          postBodyText: this.state.postBodyText
-        }),
-        headers: {'Content-Type': 'application/json'}
-      }).then(response => response.json()).then(response => {
-        if (response.redirected === 'true') {
+    fetch('/api/admin/addPost', {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({
+        postHeaderText: this.state.postHeaderText,
+        postBodyText: this.state.postBodyText
+      }),
+      headers: {'Content-Type': 'application/json'}
+    }).then(response => response.json()).then(response => {
+      if (response.redirected === 'true') {
+        if (this.state.openCropper) {
+          this.setState({
+            openModal: false,
+            openCropper: false,
+            status: null,
+            disableButton: false
+          }, () => {
+            this.setState({
+              openModal: true,
+              status: 'WELL DONE!',
+              message: 'Your post was added successfully.',
+              redirectLocation: '/profile'
+            });
+          });
+        } else {
           this.setState({
             openModal: true,
             status: 'WELL DONE!',
             message: 'Your post was added successfully.',
             redirectLocation: '/profile'
           });
-        } else if (response.status === 'ERROR') {
-          this.setState({
-            openModal: true,
-            status: response.status,
-            message: response.message
-          });
-        } else {
-          this.setState({
-            openModal: true,
-            status: 'ERROR',
-            message: 'An unknown error occurred. Dang.',
-            redirectLocation: '/profile'
-          });
         }
-      }).catch(() => {
+      } else if (response.status === 'ERROR') {
+        this.setState({
+          openModal: true,
+          status: response.status,
+          message: response.message
+        });
+      } else {
         this.setState({
           openModal: true,
           status: 'ERROR',
-          message: 'There was an issue communicating with the server. We\'re gonna send you home now.',
-          redirectLocation: '/'
+          message: 'An unknown error occurred. Dang.',
+          redirectLocation: '/profile'
         });
+      }
+    }).catch(() => {
+      this.setState({
+        openModal: true,
+        status: 'ERROR',
+        message: 'There was an issue communicating with the server. We\'re gonna send you home now.',
+        redirectLocation: '/'
       });
-    }
+    });
+  }
+
+  openCropperModal (event) {
+    event.preventDefault();
+
+    this.setState({
+      openModal: false,
+      openCropper: false,
+      status: null,
+      disableButton: false,
+      imageAdded: false
+    }, () => {
+      this.setState({
+        openModal: true,
+        openCropper: true,
+        status: 'Crop your image',
+        disableButton: true,
+      });
+    });
+  }
+
+  getCroppedImage (image) {
+    this.setState({
+      image: image,
+    });
   }
 
   handleErrors () {
@@ -184,7 +152,9 @@ class AddPost extends Component {
       this.setState({
         openModal: false,
         status: null,
-        message: null
+        message: null,
+        openCropper: false,
+        disableButton: false
       });
     }
   }
@@ -204,6 +174,8 @@ class AddPost extends Component {
             status={ this.state.status }
             message={ this.state.message }
             redirectLocation={ this.state.redirectLocation }
+            openCropper={ this.state.openCropper }
+            getCroppedImage={ this.state.openCropper ? this.state.getCroppedImage : null }
             disableButton={ this.state.disableButton }
           /> : false
         }
@@ -222,13 +194,10 @@ class AddPost extends Component {
           /><br />
           <RaisedButton
             primary={ true }
-            className="AddPost-add-image-button"
             containerElement='label'
             label='Add Image'
-            onClick={ this.handleErrors }>
-            <input type="file" className="AddPost-upload-input" onChange={ this.handleAddedImage } />
+            onClick={ this.openCropperModal }>
           </RaisedButton>
-          <span className="AddPost-image-text">{ this.state.image ? this.state.image.name : 'No image selected' }</span>
           <br />
           <ReactQuill
             id="postBodyText"
@@ -238,11 +207,19 @@ class AddPost extends Component {
             onChange={ this.handleBodyChange }>
           </ReactQuill>
           <CardActions>
-            <RaisedButton
-              primary={ true }
-              label="Submit Post"
-              onClick={ this.handleSubmitPostButtonClick }
-            />
+            <div className="AddPost-card-actions-container">
+              <RaisedButton
+                className="AddPost-card-actions-button"
+                primary={ true }
+                label="Post"
+                onClick={ this.handleSubmitPostButtonClick }
+              />
+              <div className="AddPost-card-actions-image-preview-container">
+                { this.state.image ?
+                  <img className="AddPost-card-actions-image-preview" src={ this.state.image } alt="Upload Preview"></img>
+                  : null}
+              </div>
+            </div>
           </CardActions>
         </Card>
       </div>
