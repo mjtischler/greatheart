@@ -16,6 +16,7 @@ class Posts extends Component {
       openModal: false,
       status: null,
       message: null,
+      image: null,
       loaded: false,
       posts: [],
       postReturnLimit: 3
@@ -76,7 +77,8 @@ class Posts extends Component {
     this.setState({
       openModal: true,
       status: post.postHeaderText,
-      message: post.postBodyText
+      message: post.postBodyText,
+      image: `/posts/images/${post.postImage}`
     });
   }
 
@@ -126,6 +128,7 @@ class Posts extends Component {
             <PostModal
               open={ this.state.openModal }
               status={ this.state.status }
+              image={ this.state.image }
               message={ this.state.message }
               close={ this.closePost }
             />
