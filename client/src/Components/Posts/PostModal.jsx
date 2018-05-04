@@ -20,6 +20,7 @@ class PostModal extends Component {
     this.state = {
       open: props.open,
       status: props.status,
+      image: props.image,
       message: props.message,
       close: props.close
     };
@@ -31,6 +32,7 @@ class PostModal extends Component {
     this.setState({
       open: this.props.open,
       status: this.props.status,
+      image: this.props.image,
       message: this.props.message,
       close: this.props.close
     });
@@ -68,6 +70,10 @@ class PostModal extends Component {
           onRequestClose={ () => this.handleClose() }
           autoScrollBodyContent={ true }
         >
+          { this.state.image ?
+            <img className="Posts-modal-image" src={ this.state.image } alt={ this.state.status }></img> :
+            null
+          }
           <div dangerouslySetInnerHTML={ this.createMarkup(this.state.message) }></div>
         </Dialog>
       </div>
@@ -78,7 +84,8 @@ class PostModal extends Component {
 PostModal.propTypes = {
   open: PropTypes.bool.isRequired,
   status: PropTypes.string.isRequired,
-  message: PropTypes.any.isRequired,
+  message: PropTypes.any,
+  image: PropTypes.string,
   close: PropTypes.func.isRequired
 };
 

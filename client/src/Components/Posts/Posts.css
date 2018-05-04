@@ -73,6 +73,11 @@
   display: none;
 }
 
+.Posts-modal-image {
+  margin: 8px 0;
+  max-width: 100%;
+}
+
 /* MT: This is a fix to prevent the dialog from pushing the sidebar out of the viewport. */
 .posts-modalContainer {
   display: none;
